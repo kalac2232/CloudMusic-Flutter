@@ -8,14 +8,16 @@ class DisCoverPage extends StatefulWidget {
 class _DisCoverPageState extends State<DisCoverPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: Text(
-          "发现页面",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black,
+    return SafeArea(
+      child: Container(
+        color: Colors.red,
+        child: Center(
+          child: Text(
+            "发现页面",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

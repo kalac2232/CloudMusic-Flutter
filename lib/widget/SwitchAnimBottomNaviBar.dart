@@ -62,8 +62,9 @@ class _SwitchAnimBottomNaviBarWidgetState
                 bool isSelected =
                     widget.naviItems.indexOf(e) == _currentPageIndex;
 
-                if (isSelected && controller != null) {
+                if (isSelected && controller != null && e.selectedIcon is! ScaleTransition) {
                   e.selectedIcon = _addScaleAnim(e.selectedIcon);
+                  //print(""+e.selectedIcon.toString());
                 }
 
                 return Expanded(
@@ -93,7 +94,15 @@ class _SwitchAnimBottomNaviBarWidgetState
           controller.forward();
         });
       },
-      child: widget,
+      child: Container(
+        color: Colors.transparent,
+          alignment: Alignment.center,
+          constraints: BoxConstraints(
+            minWidth: double.infinity,
+            minHeight: double.infinity
+          ),
+          child: widget
+      ),
     );
   }
 

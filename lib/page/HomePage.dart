@@ -26,31 +26,31 @@ class _HomePageState extends State<HomePage> {
           NetNaviItemWidget(
             text: "发现",
               selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
-              normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
+              normalImage: "images/cm6_btm_icn_discovery_28x28_@3x.png",
 
           ),
           NetNaviItemWidget(
-            text: "发现",
-            selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
+            text: "视频",
+            selectedImage: "images/cm6_btm_icn_video_prs_28x28_@3x.png",
+            normalImage: "images/cm6_btm_icn_video_28x28_@3x.png",
+
+          ),
+          NetNaviItemWidget(
+            text: "我的",
+            selectedImage: "images/cm6_btm_icn_music_prs_28x28_@3x.png",
+            normalImage: "images/cm6_btm_icn_music_28x28_@3x.png",
+
+          ),
+          NetNaviItemWidget(
+            text: "云村",
+            selectedImage: "images/cm6_btm_icn_friend_prs_28x28_@3x.png",
             normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
 
           ),
           NetNaviItemWidget(
-            text: "发现",
-            selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
-
-          ),
-          NetNaviItemWidget(
-            text: "发现",
-            selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
-
-          ),
-          NetNaviItemWidget(
-            text: "发现",
-            selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
+            text: "账号",
+            selectedImage: "images/cm6_btm_icn_account_prs_28x28_@3x.png",
+            normalImage: "images/cm6_btm_icn_account_28x28_@3x.png",
 
           ),
         ],
@@ -177,6 +177,7 @@ class NetNaviItemWidget extends NaviItemWidget {
   @override
   Widget getNormalWidget() {
     return Container(
+      //color: Colors.blue,
       width: 28,
       height: 43,
       child: Stack(
