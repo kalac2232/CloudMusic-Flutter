@@ -46,6 +46,7 @@ class _SwitchAnimBottomNaviBarWidgetState
             right: 0,
             bottom: widget.barHeight,
             child: Container(
+              color: Colors.white,
               child: widget.pagers[_currentPageIndex],
             )),
         Positioned(

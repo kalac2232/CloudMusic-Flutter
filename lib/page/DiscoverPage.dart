@@ -54,7 +54,7 @@ class MainTopBar extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0.0,0.0,1.0,0.0),
-                    child: Image.asset("images/cm6_nav_icn_mic_28x28_@3x.png",width: 22.5,height: 22.5,color: HexColor.fromHex("#949595"),),
+                    child: Image.asset("images/3dTouchSearch_35x35_@3x.png",width: 22.5,height: 22.5,color: HexColor.fromHex("#949595"),),
                   ),
                   Text(
                     "Collide - Jake Miller",
