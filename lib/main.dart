@@ -1,7 +1,8 @@
-import 'package:cloudmusic/utils/HexColor.dart';
+
 import 'package:flutter/material.dart';
 
-import 'page/HomePage.dart';
+import 'home_page.dart';
+import 'commen/utils/hex_color.dart';
 
 void main() {
   runApp(MyApp());

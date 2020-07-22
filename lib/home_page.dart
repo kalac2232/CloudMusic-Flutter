@@ -1,9 +1,9 @@
-import 'package:cloudmusic/page/OnlyTextPager.dart';
-import 'package:cloudmusic/utils/HexColor.dart';
-import 'package:cloudmusic/widget/SwitchAnimBottomNaviBar.dart';
+import 'package:cloudmusic/page/only_text_pager.dart';
+import 'commen/utils/hex_color.dart';
+import 'file:///D:/FlutterProjects/CloudMusic-Flutter/lib/switch_anim_bottom_navi_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'DiscoverPage.dart';
+import 'discovery/discover_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -60,73 +60,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-Widget _createNormalItem(String image, String text) {
-  return Container(
-    width: 28,
-    height: 43,
-    child: Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          child: Image.asset(
-              image, width: 28, height: 28, color: HexColor.fromHex("#969696")),
-        ),
-        Positioned(
-          bottom: 0,
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 9,
-                color: HexColor.fromHex("#969696")
-            ),
-          ),
-        )
-      ],
-    ),
-  );
-}
-
-Widget _createSelectedItem(String image, String text) {
-  return Container(
-    width: 28,
-    height: 43,
-    child: Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          width: 28,
-          height: 28,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      HexColor.fromHex("#FE5749"),
-                      HexColor.fromHex("#FF1F14")
-                    ]), //背景渐变
-                    shape: BoxShape.circle
-                ),
-              ),
-              Image.asset(image, width: 28, height: 28)
-            ],),
-        ),
-        Positioned(
-          bottom: 0,
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 9,
-                color: HexColor.fromHex("#FF2318")
-            ),
-          ),
-        )
-      ],
-    ),
-  );
-}
 
 class NetNaviItemWidget extends NaviItemWidget {
 

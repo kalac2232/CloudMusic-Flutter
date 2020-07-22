@@ -1,4 +1,6 @@
-import 'package:cloudmusic/utils/HexColor.dart';
+
+import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/discovery/widget/banner_widget.dart';
 import 'package:flutter/material.dart';
 
 class DisCoverPage extends StatefulWidget {
@@ -15,6 +17,7 @@ class _DisCoverPageState extends State<DisCoverPage> {
         child: Column(
           children: <Widget>[
             MainTopBar(),
+            Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16),)
           ],
         ),
       ),

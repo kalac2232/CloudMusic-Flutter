@@ -1,5 +1,7 @@
-import 'package:cloudmusic/utils/HexColor.dart';
+
 import 'package:flutter/material.dart';
+
+import 'commen/utils/hex_color.dart';
 
 class SwitchAnimBottomNaviBarWidget extends StatefulWidget {
   //切换的界面
