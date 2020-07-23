@@ -11,6 +11,14 @@ class OnlyTextPage extends StatefulWidget {
 }
 
 class _OnlyTextPageState extends State<OnlyTextPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("加载页面:${widget.text}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

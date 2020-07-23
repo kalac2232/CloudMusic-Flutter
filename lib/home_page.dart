@@ -1,9 +1,10 @@
-import 'package:cloudmusic/page/only_text_pager.dart';
-import 'commen/utils/hex_color.dart';
-import 'file:///D:/FlutterProjects/CloudMusic-Flutter/lib/switch_anim_bottom_navi_bar.dart';
-import 'package:flutter/material.dart';
 
+import 'commen/utils/hex_color.dart';
+import 'package:flutter/material.dart';
+import 'generated/r.dart';
 import 'discovery/discover_page.dart';
+import 'page/only_text_pager.dart';
+import 'switch_anim_bottom_navi_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,32 +26,32 @@ class _HomePageState extends State<HomePage> {
         naviItems: <NaviItemWidget>[
           NetNaviItemWidget(
             text: "发现",
-              selectedImage: "images/cm6_btm_icn_discovery_prs_28x28_@3x.png",
-              normalImage: "images/cm6_btm_icn_discovery_28x28_@3x.png",
+              selectedImage: R.images_cm6_btm_icn_discovery_prs,
+              normalImage: R.images_cm6_btm_icn_discovery,
 
           ),
           NetNaviItemWidget(
             text: "视频",
-            selectedImage: "images/cm6_btm_icn_video_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_video_28x28_@3x.png",
+            selectedImage: R.images_cm6_btm_icn_video_prs,
+            normalImage: R.images_cm6_btm_icn_video,
 
           ),
           NetNaviItemWidget(
             text: "我的",
-            selectedImage: "images/cm6_btm_icn_music_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_music_28x28_@3x.png",
+            selectedImage: R.images_cm6_btm_icn_music_prs,
+            normalImage: R.images_cm6_btm_icn_music,
 
           ),
           NetNaviItemWidget(
             text: "云村",
-            selectedImage: "images/cm6_btm_icn_friend_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_friend_28x28_@3x.png",
+            selectedImage: R.images_cm6_btm_icn_friend_prs,
+            normalImage: R.images_cm6_btm_icn_friend,
 
           ),
           NetNaviItemWidget(
             text: "账号",
-            selectedImage: "images/cm6_btm_icn_account_prs_28x28_@3x.png",
-            normalImage: "images/cm6_btm_icn_account_28x28_@3x.png",
+            selectedImage: R.images_cm6_btm_icn_account_prs,
+            normalImage: R.images_cm6_btm_icn_account,
 
           ),
         ],

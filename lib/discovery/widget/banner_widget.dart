@@ -9,15 +9,19 @@ class BannerWidget extends StatefulWidget {
 }
 
 class _BannerWidgetState extends State<BannerWidget> {
-  
+  List<BannerBean> _banners = List();
+
   @override
   void initState() {
     super.initState();
 
     httpRequest.get(path: "/banner",parameters: {"type":2}).then((response)  {
 
-      List<BannerBean> banners = response.data["banners"].map((banner) =>BannerBean.fromJson(banner)).toList();
-      print(banners[1].pic);
+      response.data["banners"].map((banner) {
+        _banners.add(BannerBean.fromJson(banner));
+      }).toList();
+
+      print(_banners[1].pic);
     });
 
     

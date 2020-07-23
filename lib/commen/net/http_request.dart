@@ -47,4 +47,4 @@ class HttpRequest {
   }
 }
 
-HttpRequest httpRequest = HttpRequest();
+final HttpRequest httpRequest = HttpRequest();

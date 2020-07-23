@@ -1,6 +1,7 @@
 
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
+import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 
 class DisCoverPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class MainTopBar extends StatelessWidget {
             top: 8,
             width: 28,
             height: 28,
-            child: Image.asset("images/cm6_nav_icn_mic_28x28_@3x.png"),
+            child: Image.asset(R.images_cm6_nav_icn_mic),
           ),
           Positioned(
             //搜索框
@@ -57,7 +58,7 @@ class MainTopBar extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0.0,0.0,1.0,0.0),
-                    child: Image.asset("images/3dTouchSearch_35x35_@3x.png",width: 22.5,height: 22.5,color: HexColor.fromHex("#949595"),),
+                    child: Image.asset(R.images_3dTouchSearch,width: 22.5,height: 22.5,color: HexColor.fromHex("#949595"),),
                   ),
                   Text(
                     "Collide - Jake Miller",
