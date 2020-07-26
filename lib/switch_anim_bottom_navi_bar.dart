@@ -26,13 +26,14 @@ class _SwitchAnimBottomNaviBarWidgetState
   int _currentPageIndex = 0;
 
   //动画控制器
-  AnimationController controller;
-
+  AnimationController _animationController;
+  //页面切换控制器
+  PageController _pageController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    this._pageController = PageController(initialPage: this._currentPageIndex, keepPage: true);
 
   }
 
@@ -47,13 +48,23 @@ class _SwitchAnimBottomNaviBarWidgetState
             left: 0,
             right: 0,
             bottom: widget.barHeight,
-            child: Container(
-              color: Colors.white,
-              child: IndexedStack(
-                index: _currentPageIndex,
-                children: widget.pagers,
+            child: _KeepStateWidget(
+              child: Container(
+                color: Colors.white,
+                child: PageView(
+                  //禁用横向滑动切换
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  children: widget.pagers.map((widget){
+                    return _KeepStateWidget(
+                      child: widget,
+                    );
+                  }).toList(),
+                ),
+
               ),
-            )),
+            )
+        ),
         Positioned(
           left: 0,
           right: 0,
@@ -68,7 +79,7 @@ class _SwitchAnimBottomNaviBarWidgetState
                 bool isSelected =
                     widget.naviItems.indexOf(e) == _currentPageIndex;
 
-                if (isSelected && controller != null && e.selectedIcon is! ScaleTransition) {
+                if (isSelected && _animationController != null && e.selectedIcon is! ScaleTransition) {
                   e.selectedIcon = _addScaleAnim(e.selectedIcon);
                   //print(""+e.selectedIcon.toString());
                 }
@@ -90,14 +101,15 @@ class _SwitchAnimBottomNaviBarWidgetState
       onTap: () {
         setState(() {
           _currentPageIndex = index;
+          _pageController.jumpToPage(_currentPageIndex);
 
-          if(controller == null) {
-            controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this,lowerBound: 0.7);
+          if(_animationController == null) {
+            _animationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this,lowerBound: 0.7);
           }
 
 
-          controller.reset();
-          controller.forward();
+          _animationController.reset();
+          _animationController.forward();
         });
       },
       child: Container(
@@ -114,7 +126,7 @@ class _SwitchAnimBottomNaviBarWidgetState
 
   Widget _addScaleAnim(Widget widget) {
     return ScaleTransition(
-      scale: controller,
+      scale: _animationController,
       child: widget,
     );
   }
@@ -124,7 +136,8 @@ class _SwitchAnimBottomNaviBarWidgetState
   void dispose() {
     super.dispose();
 
-    controller?.dispose();
+    _animationController?.dispose();
+    _pageController?.dispose();
 
   }
 
@@ -148,4 +161,36 @@ abstract class NaviItemWidget {
   Widget getNormalWidget();
   Widget getSelectWidget();
 
+}
+
+
+class _KeepStateWidget extends StatefulWidget {
+
+  Widget child;
+
+
+  _KeepStateWidget({@required this.child});
+
+  @override
+  __KeepStateWidgetState createState() => __KeepStateWidgetState();
+}
+
+class __KeepStateWidgetState extends State<_KeepStateWidget>  with AutomaticKeepAliveClientMixin {
+
+  @override
+  void initState() {
+    super.initState();
+    print("object1");
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive =>true;
 }
