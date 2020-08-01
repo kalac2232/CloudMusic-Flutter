@@ -43,6 +43,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.15.1"
+  bloc:
+    dependency: transitive
+    description:
+      name: bloc
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "6.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -202,13 +209,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_redux:
+  flutter_bloc:
     dependency: "direct main"
     description:
-      name: flutter_redux
+      name: flutter_bloc
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.0"
+    version: "6.0.1"
   flutter_sticky_header:
     dependency: "direct main"
     description:
@@ -338,6 +345,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.9.6+3"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
   node_interop:
     dependency: transitive
     description:
@@ -436,6 +450,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.13"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.3.1"
   pub_semver:
     dependency: transitive
     description:
@@ -457,13 +478,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.3"
-  redux:
-    dependency: "direct main"
-    description:
-      name: redux
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.0.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -639,4 +653,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.7.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.5 <2.0.0"
+  flutter: ">=1.16.0 <2.0.0"

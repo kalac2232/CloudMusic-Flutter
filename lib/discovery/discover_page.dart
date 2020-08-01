@@ -1,29 +1,58 @@
 
+import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/discovery/bean/banner_bean.dart';
+import 'file:///D:/FlutterProjects/CloudMusic-Flutter/lib/discovery/bloc/cubit/banner_bloc.dart';
+import 'package:cloudmusic/discovery/bloc/event/banner_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
+import 'package:cloudmusic/discovery/widget/dragon_boll_widget.dart';
+import 'package:cloudmusic/discovery/widget/recommend_list_widget.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DisCoverPage extends StatefulWidget {
-  @override
-  _DisCoverPageState createState() => _DisCoverPageState();
-}
+import 'bloc/cubit/banner_cubit.dart';
 
-class _DisCoverPageState extends State<DisCoverPage> {
+class DisCoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<BannerCubit>(
+          create: (BuildContext context) => BannerCubit(),
+        ),
+//        BlocProvider<BlocB>(
+//          create: (BuildContext context) => BlocB(),
+//        ),
+//        BlocProvider<BlocC>(
+//          create: (BuildContext context) => BlocC(),
+//        ),
+      ],
+      child: _WrapDisCoverPage(),
+    );
+  }
+}
+
+class _WrapDisCoverPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    getBannerFromNet(context);
     return SafeArea(
       child: Container(
         color: Colors.white,
         child: Column(
           children: <Widget>[
             MainTopBar(),
-            Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16),)
+            Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16),),
+            DragBollButtons(),
+            Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27)),
           ],
         ),
       ),
     );
   }
+
 }
 
 
@@ -87,3 +116,56 @@ class MainTopBar extends StatelessWidget {
     );
   }
 }
+///
+/// 分类按钮组
+///
+class DragBollButtons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    //获取当前日期
+    var day = DateTime.now().day;
+    print("day：$day");
+    return Container(
+      //color: Colors.red,
+      padding: EdgeInsets.only(left: 16,right: 16,top: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              DragonBollWidget(text: "每日推荐",icon: R.images_cm6_disc_topbtn_daily,onTap: ()=>print("asdasdasd"),),
+              Positioned(
+                top: 19,
+                child: Text(day.toString(),style: TextStyle(color: HexColor.fromHex("#FF3D3D"),fontSize: 10),),
+              )
+            ],
+          ),
+          DragonBollWidget(text: "歌单",icon: R.images_cm6_disc_topbtn_playlist,onTap: ()=>print("asdasdasd")),
+          DragonBollWidget(text: "排行榜",icon: R.images_cm6_disc_topbtn_rank,onTap: ()=>print("asdasdasd")),
+          DragonBollWidget(text: "电台",icon: R.images_cm6_disc_topbtn_radio,onTap: ()=>print("asdasdasd")),
+          DragonBollWidget(text: "直播",icon: R.images_cm6_disc_topbtn_live,onTap: ()=>print("asdasdasd")),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+void getBannerFromNet(BuildContext context){
+  List<BannerBean> _bannerBeans = List();
+
+  httpRequest.get(path: "/banner", parameters: {"type": 2}).then((response) {
+    response.data["banners"].map((banner) {
+      _bannerBeans.add(BannerBean.fromJson(banner));
+    }).toList();
+
+    //context.bloc<BannerBloc>().add(BannerEvent(_bannerBeans));
+    context.bloc<BannerCubit>().setBanner(_bannerBeans);
+  });
+
+
+}
+

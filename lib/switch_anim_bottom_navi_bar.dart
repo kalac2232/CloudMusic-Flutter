@@ -180,7 +180,6 @@ class __KeepStateWidgetState extends State<_KeepStateWidget>  with AutomaticKeep
   @override
   void initState() {
     super.initState();
-    print("object1");
 
   }
 
