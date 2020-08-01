@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 
 import 'home_page.dart';
 import 'commen/utils/hex_color.dart';
@@ -12,10 +13,9 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       theme: ThemeData(
         primaryColor: HexColor.fromHex("#FF1F14"),

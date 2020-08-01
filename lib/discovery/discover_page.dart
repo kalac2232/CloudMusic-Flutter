@@ -1,9 +1,11 @@
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
+import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
+import 'bloc/cubit/recommed_list_cubit.dart';
 import 'file:///D:/FlutterProjects/CloudMusic-Flutter/lib/discovery/bloc/cubit/banner_bloc.dart';
-import 'package:cloudmusic/discovery/bloc/event/banner_event.dart';
+import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
 import 'package:cloudmusic/discovery/widget/dragon_boll_widget.dart';
 import 'package:cloudmusic/discovery/widget/recommend_list_widget.dart';
@@ -22,9 +24,9 @@ class DisCoverPage extends StatelessWidget {
         BlocProvider<BannerCubit>(
           create: (BuildContext context) => BannerCubit(),
         ),
-//        BlocProvider<BlocB>(
-//          create: (BuildContext context) => BlocB(),
-//        ),
+        BlocProvider<RecommendListCubit>(
+          create: (BuildContext context) => RecommendListCubit(),
+        ),
 //        BlocProvider<BlocC>(
 //          create: (BuildContext context) => BlocC(),
 //        ),
@@ -37,7 +39,10 @@ class DisCoverPage extends StatelessWidget {
 class _WrapDisCoverPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    //获取banner
     getBannerFromNet(context);
+    //获取推荐歌单
+    getRecommendListFromNet(context);
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -60,13 +65,13 @@ class MainTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 44,
+      height: 44.h,
       width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            left: 16,
+            left: 16.w,
             top: 8,
             width: 28,
             height: 28,
@@ -165,7 +170,17 @@ void getBannerFromNet(BuildContext context){
     //context.bloc<BannerBloc>().add(BannerEvent(_bannerBeans));
     context.bloc<BannerCubit>().setBanner(_bannerBeans);
   });
-
-
 }
 
+void getRecommendListFromNet(BuildContext context){
+  List<RecommendListBean> _list = List();
+
+  httpRequest.get(path: "/personalized", parameters: {"limit": 6}).then((response) {
+    response.data["result"].map((banner) {
+      _list.add(RecommendListBean.fromJson(banner));
+    }).toList();
+
+    //context.bloc<BannerBloc>().add(BannerEvent(_bannerBeans));
+    context.bloc<RecommendListCubit>().setList(_list);
+  });
+}

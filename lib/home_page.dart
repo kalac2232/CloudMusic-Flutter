@@ -1,4 +1,6 @@
 
+import 'package:flutter_screenutil/screenutil.dart';
+
 import 'commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'generated/r.dart';
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 375, height: 667);
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
