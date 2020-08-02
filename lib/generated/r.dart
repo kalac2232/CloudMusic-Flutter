@@ -16,4 +16,9 @@ class R {
 	static const String images_cm6_disc_topbtn_radio = "assets/images/cm6_disc_topbtn_radio.png";
 	static const String images_cm6_disc_topbtn_rank = "assets/images/cm6_disc_topbtn_rank.png";
 	static const String images_cm6_nav_icn_mic = "assets/images/cm6_nav_icn_mic.png";
+	static const String images_icon_reclist_left_more = "assets/images/icon_reclist_left_more.png";
+	static const String images_cm6_play_count_shadow = "assets/images/cm6_play_count_shadow.png";
+	static const String images_cm6_play_icon_red_play = "assets/images/cm6_play_icon_red_play.png";
+	static const String images_cm2_icn_sq_15 = "assets/images/cm2_icn_sq_15.png";
+	static const String images_cm5_list_icn_exclusive = "assets/images/cm5_list_icn_exclusive.png";
 }

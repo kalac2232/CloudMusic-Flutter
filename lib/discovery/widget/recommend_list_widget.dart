@@ -1,11 +1,13 @@
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/recommed_list_cubit.dart';
+import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RecommendListWidget extends StatelessWidget {
   ScrollController _scrollController = ScrollController();
@@ -13,20 +15,21 @@ class RecommendListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _scrollController.addListener(() {
-      print(_scrollController.offset); //打印滚动位置
-      //print(isScroll); //打印滚动位置
+      //print(_scrollController.offset); //打印滚动位置
 
-//      if (_scrollController.offset > 280) {
-//        _scrollController.animateTo(280,
-//            duration: Duration(microseconds: 1000), curve: Curves.linear);
-//      }
+      if (_scrollController.offset > _scrollController.position.maxScrollExtent) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        Fluttertoast.showToast(msg: "进入更多页");
+        //bool canVibrate = Vibrate.canVibrate;
+
+      }
     });
     return BlocBuilder<RecommendListCubit, List<RecommendListBean>>(
       builder: (BuildContext context, List<RecommendListBean> state) {
 
-        List<String> titles = ["人气歌单推荐","你的歌单精选站","发现好歌单","懂你的精选歌单"];
+        List<String> titles = ["人气歌单推荐","你的歌单精选站","发现好歌单","懂你的精选歌单","宝藏歌单，值得聆听"];
 
-        var randomTitle = titles[math.Random().nextInt(4)];
+        var randomTitle = titles[math.Random().nextInt(5)];
 
         return Container(
           height: 183.h,
@@ -106,6 +109,7 @@ class RecommendListWidget extends StatelessWidget {
                             right: 6,
                             child: Row(
                               children: <Widget>[
+                                Image.asset(R.images_cm6_play_count_shadow,width: 15.w,height: 15.h,),
                                 Text(
                                   _formatCount(state[index].playCount),
                                   style: TextStyle(
@@ -119,13 +123,13 @@ class RecommendListWidget extends StatelessWidget {
                           ),
                           Positioned(
                             width: 105.w,
-                            top: 112.h,
+                            top: 111.h,
                             child: Text(
                               state[index].name,
                               maxLines: 2,
                               style: TextStyle(
                                   color: HexColor.fromHex("#333333"),
-                                  fontSize: 12
+                                  fontSize: 13.sp,
                               ),
                             ),
                           )
@@ -153,7 +157,7 @@ class RecommendListWidget extends StatelessWidget {
   Widget _moreWidget() {
     return Container(
       //color: Colors.red,
-      width: 75.w,
+      width: 70.w,
       height: 145.h,
       child: Stack(
         children: <Widget>[
@@ -163,10 +167,32 @@ class RecommendListWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius:
                 BorderRadius.all(Radius.circular(8.0)),
-                color: Colors.red,
+                color: HexColor.fromHex("#F8F8F8"),
               ),
-              width: 75.w,
+              width: 70.w,
               height: 105.w,
+              child: Container(
+                alignment: Alignment.center,
+                //color: Colors.red,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Image.asset(R.images_icon_reclist_left_more,width: 10.w,height: 10.h,),
+                    Container(
+                      margin: EdgeInsets.only(top: 2),
+                      width: 10.w,
+                      child: Text(
+                        "左滑更多",
+
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: HexColor.fromHex("#C7C7C7")
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
 
@@ -195,6 +221,8 @@ class RecommendListWidget extends StatelessWidget {
 const double kMinFlingVelocity = 50.0;
 
 class BouncingScrollPhysics1 extends ScrollPhysics {
+
+
   /// Creates scroll physics that bounce back from the edge.
   const BouncingScrollPhysics1({ScrollPhysics parent}) : super(parent: parent);
 
@@ -224,7 +252,7 @@ class BouncingScrollPhysics1 extends ScrollPhysics {
     final double overscrollPastStart =
         math.max(position.minScrollExtent - position.pixels, 0.0);
     final double overscrollPastEnd =
-        math.max(position.pixels - position.maxScrollExtent - 100, 0.0);
+        math.max(position.pixels - (position.maxScrollExtent - 53.w), 0.0);
     final double overscrollPast =
         math.max(overscrollPastStart, overscrollPastEnd);
     final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
@@ -267,7 +295,7 @@ class BouncingScrollPhysics1 extends ScrollPhysics {
         velocity: velocity * 0.91,
         // TODO(abarth): We should move this constant closer to the drag end.
         leadingExtent: position.minScrollExtent,
-        trailingExtent: position.maxScrollExtent - 100,
+        trailingExtent: position.maxScrollExtent - 53.w,
         tolerance: tolerance,
       );
     }
@@ -282,7 +310,7 @@ class BouncingScrollPhysics1 extends ScrollPhysics {
 
   bool outOfRange(position) {
     return position.pixels < position.minScrollExtent ||
-        position.pixels > (position.maxScrollExtent - 100);
+        position.pixels > (position.maxScrollExtent - 53.w);
   }
 
   // Methodology:

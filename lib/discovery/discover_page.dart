@@ -1,10 +1,11 @@
+import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
+import 'package:cloudmusic/discovery/widget/discover_new_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
 import 'bloc/cubit/recommed_list_cubit.dart';
-import 'file:///D:/FlutterProjects/CloudMusic-Flutter/lib/discovery/bloc/cubit/banner_bloc.dart';
 import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
 import 'package:cloudmusic/discovery/widget/dragon_boll_widget.dart';
@@ -46,12 +47,35 @@ class _WrapDisCoverPage extends StatelessWidget{
     return SafeArea(
       child: Container(
         color: Colors.white,
-        child: Column(
+        child: Stack(
           children: <Widget>[
-            MainTopBar(),
-            Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16),),
-            DragBollButtons(),
-            Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27)),
+            Positioned(
+              top: 0,
+                left: 0,
+                right: 0,
+                child: MainTopBar()
+            ),
+            Positioned(
+              top: 44.h,
+              bottom: 0,
+              width: MediaQuery.of(context).size.width,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16.h),),
+                        DragBollButtons(),
+                        Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27.h)),
+                        Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
+                        Padding(child: DiscoverNewWidget(),padding: EdgeInsets.only(top:34.h)),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+
           ],
         ),
       ),
