@@ -94,7 +94,7 @@ class RecommendListWidget extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(state[index].picUrl),
+                                    image: NetworkImage(state[index].picUrl+"?param=200y200"),
                                     fit: BoxFit.cover),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0)),

@@ -65,7 +65,7 @@ class DiscoverNewWidget extends StatelessWidget {
             top: 38.h,
             height: 200.h,
             width: MediaQuery.of(context).size.width,
-            child: DiscoverSongListPageView(),
+            child: DiscoverSongListPageView(null),
           )
         ],
       ),

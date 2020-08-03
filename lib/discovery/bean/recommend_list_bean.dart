@@ -45,4 +45,8 @@ class RecommendListBean extends Object {
 
   Map<String, dynamic> toJson() => _$RecommendListBeanToJson(this);
 
+  @override
+  String toString() {
+    return 'RecommendListBean{id: $id, type: $type, name: $name, copywriter: $copywriter, picUrl: $picUrl, canDislike: $canDislike, trackNumberUpdateTime: $trackNumberUpdateTime, playCount: $playCount, trackCount: $trackCount, highQuality: $highQuality, alg: $alg}';
+  }
 }

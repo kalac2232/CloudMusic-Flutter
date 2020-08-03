@@ -24,7 +24,7 @@ class HttpRequest {
       print("请求地址:" + options.path);
       return options;
     }, onResponse: (Response response) {
-      print("拿到内容:" + response.toString());
+      //print("拿到内容:" + response.toString());
       return response;
     }, onError: (DioError e) {
       print("连接错误:" + e.error.toString());

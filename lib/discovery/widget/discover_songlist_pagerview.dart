@@ -1,16 +1,25 @@
+import 'dart:math';
+
 import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/discovery/bean/song_list_item_bean.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DiscoverSongListPageView extends StatelessWidget {
+
+  List<SongListItemBean> list;
+
+  DiscoverSongListPageView(this.list);
+
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
+    return this.list == null || list.isEmpty ? Container() : PageView.builder(
         controller: PageController(
           viewportFraction: 341 / 375,
         ),
-        itemCount: 3,
+        physics: BouncingScrollPhysics(),
+        itemCount: list.length ~/ 3,
         itemBuilder: (context, index) {
           return Container(
             //height: 200.h,
@@ -21,15 +30,15 @@ class DiscoverSongListPageView extends StatelessWidget {
                 Positioned(
                   top: 0,
                   //left: 0,
-                  child: _getItem(index * 3 + 1),
+                  child: _getItem(list[index * 3 + 1]),
                 ),
                 Positioned(
                   //left: 0,
-                  child: _getItem(index * 3 + 2),
+                  child: _getItem(list[index * 3 + 2]),
                 ),
                 Positioned(
                   bottom: 0,
-                  child: _getItem(index * 3 + 3),
+                  child: _getItem(list[index * 3 + 3]),
                 ),
               ],
             ),
@@ -38,7 +47,7 @@ class DiscoverSongListPageView extends StatelessWidget {
   }
 }
 
-Widget _getItem(int index) {
+Widget _getItem(SongListItemBean bean) {
   return Container(
     height: 60.h,
     width: 341.w,
@@ -50,8 +59,7 @@ Widget _getItem(int index) {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                      "https://p2.music.126.net/ySAPT2l0oiv3nNYFPKupAA==/109951164796920183.jpg"),
+                  image: NetworkImage(bean.picUrl+"?param=160y160"),
                   fit: BoxFit.cover),
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
               //color: Colors.red
@@ -87,7 +95,7 @@ Widget _getItem(int index) {
                   maxWidth: 130.w,
                 ),
                 child: Text(
-                  "泼墨漓asadsasd",
+                  bean.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -96,7 +104,7 @@ Widget _getItem(int index) {
               ),
               Expanded(
                 child: Text(
-                  " - 泠鸢 yousa1",
+                  " - " + bean.author,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -109,7 +117,7 @@ Widget _getItem(int index) {
         Positioned(
           bottom: 10.h,
           left: 70.w,
-          child: _getSubtitle(3),
+          child: _getSubtitle(Random().nextInt(4)),
         )
       ],
     ),
@@ -125,7 +133,7 @@ Widget _getSubtitle(int type) {
         color: HexColor.fromHex("#FFE1E1"),
         borderRadius: BorderRadius.circular(3),
       ),
-      child: Text("超68%人播放",style: TextStyle(
+      child: Text("超"+ (60+Random().nextInt(40)).toString() +"%人播放",style: TextStyle(
         color: HexColor.fromHex("#FF3A3A"),
         fontSize: 9,
       ),),

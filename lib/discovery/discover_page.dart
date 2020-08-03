@@ -1,3 +1,5 @@
+import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_new_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +7,8 @@ import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
+import 'bean/song_list_item_bean.dart';
+import 'bloc/cubit/discover_category_cubit.dart';
 import 'bloc/cubit/recommed_list_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
@@ -28,9 +32,9 @@ class DisCoverPage extends StatelessWidget {
         BlocProvider<RecommendListCubit>(
           create: (BuildContext context) => RecommendListCubit(),
         ),
-//        BlocProvider<BlocC>(
-//          create: (BuildContext context) => BlocC(),
-//        ),
+        BlocProvider<DiscoverCategoryCubit>(
+          create: (BuildContext context) => DiscoverCategoryCubit(),
+        ),
       ],
       child: _WrapDisCoverPage(),
     );
@@ -44,6 +48,8 @@ class _WrapDisCoverPage extends StatelessWidget{
     getBannerFromNet(context);
     //获取推荐歌单
     getRecommendListFromNet(context);
+
+    getCategoryListFromNet(context);
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -200,11 +206,33 @@ void getRecommendListFromNet(BuildContext context){
   List<RecommendListBean> _list = List();
 
   httpRequest.get(path: "/personalized", parameters: {"limit": 6}).then((response) {
-    response.data["result"].map((banner) {
-      _list.add(RecommendListBean.fromJson(banner));
+    response.data["result"].map((result) {
+      _list.add(RecommendListBean.fromJson(result));
     }).toList();
 
     //context.bloc<BannerBloc>().add(BannerEvent(_bannerBeans));
     context.bloc<RecommendListCubit>().setList(_list);
+  });
+}
+
+void getCategoryListFromNet(BuildContext context){
+
+
+  httpRequest.get(path: "/top/playlist", parameters: {"limit": 1,"cat":"官方"}).then((response) {
+    var data = response.data["playlists"][0];
+    RecommendListBean bean = RecommendListBean.fromJson(data);
+    return bean;
+  }).then((bean) {
+    httpRequest.get(path: "/playlist/detail", parameters: {"id": bean.id}).then((response) {
+      List<SongListItemBean> _list = List();
+      response.data["playlist"]["tracks"].map((result) {
+        _list.add(SongListItemBean.fromJson(result));
+      }).toList();
+      var substring = bean.name.substring(1,bean.name.indexOf(']'));
+      var discoverCategoryBean = new DiscoverCategoryBean(substring, _list);
+      print(discoverCategoryBean.toString());
+
+      context.bloc<DiscoverCategoryCubit>().setBean(discoverCategoryBean);
+    });
   });
 }
