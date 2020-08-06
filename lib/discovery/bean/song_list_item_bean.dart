@@ -6,11 +6,17 @@ class SongListItemBean{
 
   SongListItemBean(this.name, this.id, this.author, this.picUrl);
 
-  SongListItemBean.fromJson(Map<String, dynamic> json)
+  SongListItemBean.fromCategoryJson(Map<String, dynamic> json)
       : name = json['name'],
         id = json['id'],
         author = json['ar'][0]["name"],
         picUrl = json['al']["picUrl"];
+
+  SongListItemBean.fromNewSongJson(Map<String, dynamic> json)
+      : name = json['name'],
+        id = json['id'],
+        author = json['album']["artists"][0]["name"],
+        picUrl = json['album']["blurPicUrl"];
 
   Map<String, dynamic> toJson() =>
       {

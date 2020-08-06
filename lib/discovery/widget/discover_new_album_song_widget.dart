@@ -1,11 +1,18 @@
 import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/discovery/bean/album_list_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_list_item_bean.dart';
+import 'package:cloudmusic/discovery/bloc/cubit/discover_new_album_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_new_category_bloc.dart';
+import 'package:cloudmusic/discovery/bloc/cubit/discover_new_song_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/discover_songlist_pagerview.dart';
+import 'package:cloudmusic/discovery/widget/song_item_widget.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'album_item_widget.dart';
 
 class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
   @override
@@ -86,7 +93,7 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
                 top: 38.h,
                 height: 200.h,
                 width: MediaQuery.of(context).size.width,
-                child: DiscoverSongListPageView(null),
+                child: state == DiscoverNewCategoryEvent.newSong?_getNewSongWidget():_getNewAlbumWidget(),
               )
             ],
           ),
@@ -96,4 +103,27 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
     );
   }
 
+  Widget _getNewSongWidget() {
+    return BlocBuilder<DiscoverNewSongCubit,List<SongListItemBean>>(
+      builder: (context, List<SongListItemBean> state) {
+
+        return DiscoverSongListPageView<SongListItemBean>(
+          list: state,
+          itemBuilder: (BuildContext context, SongListItemBean bean) {
+            return SongItemWidget(bean:bean);
+        },);
+    },);
+  }
+
+  Widget _getNewAlbumWidget() {
+    return BlocBuilder<DiscoverNewAlbumCubit,List<AlbumListItemBean>>(
+      builder: (context, List<AlbumListItemBean> state) {
+
+        return DiscoverSongListPageView<AlbumListItemBean>(
+          list: state,
+          itemBuilder: (BuildContext context, AlbumListItemBean bean) {
+            return AlbumItemWidget(bean:bean);
+          },);
+      },);
+  }
 }

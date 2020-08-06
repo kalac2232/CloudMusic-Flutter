@@ -6,13 +6,15 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'home_page.dart';
 import 'commen/utils/hex_color.dart';
 
-void main() {
-  Bloc.observer = SimpleBlocObserver();
 
-  runApp(MyApp());
+void main() {
+  //Bloc.observer = SimpleBlocObserver();
+  print("main");
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
 

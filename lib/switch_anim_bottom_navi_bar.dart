@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'commen/utils/hex_color.dart';
@@ -31,7 +33,6 @@ class _SwitchAnimBottomNaviBarWidgetState
   PageController _pageController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this._pageController = PageController(initialPage: this._currentPageIndex, keepPage: true);
 
@@ -65,6 +66,8 @@ class _SwitchAnimBottomNaviBarWidgetState
               ),
             )
         ),
+
+
         Positioned(
           left: 0,
           right: 0,
@@ -91,7 +94,26 @@ class _SwitchAnimBottomNaviBarWidgetState
               }).toList(),
             ),
           ),
-        )
+
+        ),
+        Positioned(
+          left: 10,
+          bottom: 0,
+          width: 100,
+          height: 100,
+          child: Container(
+            width: 100,
+            height: 100,
+            child: BackdropFilter(
+
+              filter:  ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.white,
+                height: widget.barHeight,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -190,6 +212,5 @@ class __KeepStateWidgetState extends State<_KeepStateWidget>  with AutomaticKeep
   }
 
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive =>true;
+  bool get wantKeepAlive => true;
 }

@@ -8,14 +8,11 @@ import 'discovery/discover_page.dart';
 import 'page/only_text_pager.dart';
 import 'switch_anim_bottom_navi_bar.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+class HomePage extends StatelessWidget {
 
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    print("HomePage");
     ScreenUtil.init(context, width: 375, height: 667);
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
@@ -25,6 +22,7 @@ class _HomePageState extends State<HomePage> {
           OnlyTextPage(text: "页面2",),
           OnlyTextPage(text: "页面3",),
           OnlyTextPage(text: "页面4",),
+          //OnlyTextPage(text: "页面5",),
         ],
         naviItems: <NaviItemWidget>[
           NetNaviItemWidget(

@@ -2,14 +2,18 @@ import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
 import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_new_album_song_widget.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
+import 'bean/album_list_item_bean.dart';
 import 'bean/song_list_item_bean.dart';
 import 'bloc/cubit/discover_category_cubit.dart';
+import 'bloc/cubit/discover_new_album_cubit.dart';
 import 'bloc/cubit/discover_new_category_bloc.dart';
+import 'bloc/cubit/discover_new_song_cubit.dart';
 import 'bloc/cubit/recommed_list_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
@@ -24,6 +28,7 @@ import 'bloc/cubit/banner_cubit.dart';
 class DisCoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("DisCoverPage");
 
     return MultiBlocProvider(
       providers: [
@@ -38,6 +43,12 @@ class DisCoverPage extends StatelessWidget {
         ),
         BlocProvider<DiscoverNewCategoryBloc>(
           create: (BuildContext context) => DiscoverNewCategoryBloc(DiscoverNewCategoryEvent.newSong),
+        ),
+        BlocProvider<DiscoverNewSongCubit>(
+          create: (BuildContext context) => DiscoverNewSongCubit(),
+        ),
+        BlocProvider<DiscoverNewAlbumCubit>(
+          create: (BuildContext context) => DiscoverNewAlbumCubit(),
         ),
       ],
       child: _WrapDisCoverPage(),
@@ -54,6 +65,10 @@ class _WrapDisCoverPage extends StatelessWidget{
     getRecommendListFromNet(context);
     //获取某种歌曲列表及标题
     getCategoryListFromNet(context);
+    //获取新歌推荐
+    getNewSongFromNet(context);
+    //获取新碟
+    getNewAlbumFromNet(context);
 
     //context.bloc<DiscoverNewCategoryBloc>().add(DiscoverNewCategoryEvent.newAlbum);
     return SafeArea(
@@ -232,13 +247,41 @@ void getCategoryListFromNet(BuildContext context){
     httpRequest.get(path: "/playlist/detail", parameters: {"id": bean.id}).then((response) {
       List<SongListItemBean> _list = List();
       response.data["playlist"]["tracks"].map((result) {
-        _list.add(SongListItemBean.fromJson(result));
+        _list.add(SongListItemBean.fromCategoryJson(result));
       }).toList();
       var substring = bean.name.substring(1,bean.name.indexOf(']'));
       var discoverCategoryBean = new DiscoverCategoryBean(substring, _list);
-      print(discoverCategoryBean.toString());
+      //print(discoverCategoryBean.toString());
 
       context.bloc<DiscoverCategoryCubit>().setBean(discoverCategoryBean);
     });
+  });
+}
+
+void getNewSongFromNet(BuildContext context){
+
+
+  httpRequest.get(path: "/top/song").then((response) {
+    List<SongListItemBean> _list = List();
+    response.data["data"].sublist(0,15).map((result) {
+      _list.add(SongListItemBean.fromNewSongJson(result));
+    }).toList();
+    //print(_list.length.toString());
+
+    context.bloc<DiscoverNewSongCubit>().setList(_list);
+  });
+}
+
+void getNewAlbumFromNet(BuildContext context){
+
+
+  httpRequest.get(path: "/top/album",parameters: {"limit":"15"}).then((response) {
+    List<AlbumListItemBean> _list = List();
+    response.data["albums"].map((result) {
+      _list.add(AlbumListItemBean.fromJson(result));
+    }).toList();
+    //print(_list.length.toString());
+
+    context.bloc<DiscoverNewAlbumCubit>().setList(_list);
   });
 }
