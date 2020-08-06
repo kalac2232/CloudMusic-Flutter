@@ -1,7 +1,7 @@
 import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
 import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
-import 'package:cloudmusic/discovery/widget/discover_new_widget.dart';
+import 'package:cloudmusic/discovery/widget/discover_new_album_song_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
@@ -9,6 +9,7 @@ import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
 import 'bean/song_list_item_bean.dart';
 import 'bloc/cubit/discover_category_cubit.dart';
+import 'bloc/cubit/discover_new_category_bloc.dart';
 import 'bloc/cubit/recommed_list_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/event/discovery_event.dart';
 import 'package:cloudmusic/discovery/widget/banner_widget.dart';
@@ -35,6 +36,9 @@ class DisCoverPage extends StatelessWidget {
         BlocProvider<DiscoverCategoryCubit>(
           create: (BuildContext context) => DiscoverCategoryCubit(),
         ),
+        BlocProvider<DiscoverNewCategoryBloc>(
+          create: (BuildContext context) => DiscoverNewCategoryBloc(DiscoverNewCategoryEvent.newSong),
+        ),
       ],
       child: _WrapDisCoverPage(),
     );
@@ -48,8 +52,10 @@ class _WrapDisCoverPage extends StatelessWidget{
     getBannerFromNet(context);
     //获取推荐歌单
     getRecommendListFromNet(context);
-
+    //获取某种歌曲列表及标题
     getCategoryListFromNet(context);
+
+    //context.bloc<DiscoverNewCategoryBloc>().add(DiscoverNewCategoryEvent.newAlbum);
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -74,7 +80,7 @@ class _WrapDisCoverPage extends StatelessWidget{
                         DragBollButtons(),
                         Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27.h)),
                         Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
-                        Padding(child: DiscoverNewWidget(),padding: EdgeInsets.only(top:34.h)),
+                        Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.h)),
                       ],
                     ),
                   )

@@ -14,6 +14,7 @@ class DiscoverSongListPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("object1");
     return this.list == null || list.isEmpty ? Container() : PageView.builder(
         controller: PageController(
           viewportFraction: 341 / 375,

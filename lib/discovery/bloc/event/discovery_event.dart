@@ -8,3 +8,7 @@ class BannerEvent{
   BannerEvent(this.list);
 }
 
+enum DiscoverNewCategoryEvent {
+  newAlbum,
+  newSong
+}
