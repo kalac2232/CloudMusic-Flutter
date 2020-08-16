@@ -37,6 +37,7 @@ dependencies:
   json_annotation: ^3.0.1
   flutter_bloc: ^6.0.1
   flutter_screenutil: ^2.3.0
+  palette_generator: ^0.2.3
 
 dev_dependencies:
   flutter_test:

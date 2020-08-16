@@ -1,5 +1,7 @@
 import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
+import 'package:cloudmusic/discovery/bean/discover_rank_bean.dart';
 import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
+import 'package:cloudmusic/discovery/bloc/cubit/discover_rank_cubit.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_new_album_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_rank_widget.dart';
@@ -10,7 +12,7 @@ import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
 import 'bean/album_list_item_bean.dart';
-import 'bean/song_list_item_bean.dart';
+import 'bean/song_item_bean.dart';
 import 'bloc/cubit/discover_category_cubit.dart';
 import 'bloc/cubit/discover_new_album_cubit.dart';
 import 'bloc/cubit/discover_new_category_bloc.dart';
@@ -51,6 +53,9 @@ class DisCoverPage extends StatelessWidget {
         BlocProvider<DiscoverNewAlbumCubit>(
           create: (BuildContext context) => DiscoverNewAlbumCubit(),
         ),
+        BlocProvider<DiscoverRankCubit>(
+          create: (BuildContext context) => DiscoverRankCubit(),
+        ),
       ],
       child: _WrapDisCoverPage(),
     );
@@ -70,6 +75,8 @@ class _WrapDisCoverPage extends StatelessWidget{
     getNewSongFromNet(context);
     //获取新碟
     getNewAlbumFromNet(context);
+    //获取排行榜
+    getRankData(context);
 
     //context.bloc<DiscoverNewCategoryBloc>().add(DiscoverNewCategoryEvent.newAlbum);
     return SafeArea(
@@ -98,10 +105,10 @@ class _WrapDisCoverPage extends StatelessWidget{
                         Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
                         Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.h)),
                         Padding(child: DiscoverRankWidget(),padding: EdgeInsets.only(top:34.h)),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50.h,
-                        )
+//                        SizedBox(
+//                          width: double.infinity,
+//                          height: 50.h,
+//                        )
                       ],
                     ),
                   )
@@ -251,9 +258,9 @@ void getCategoryListFromNet(BuildContext context){
     return bean;
   }).then((bean) {
     httpRequest.get(path: "/playlist/detail", parameters: {"id": bean.id}).then((response) {
-      List<SongListItemBean> _list = List();
+      List<SongItemBean> _list = List();
       response.data["playlist"]["tracks"].map((result) {
-        _list.add(SongListItemBean.fromCategoryJson(result));
+        _list.add(SongItemBean.fromCategoryJson(result));
       }).toList();
       var substring = bean.name.substring(1,bean.name.indexOf(']'));
       var discoverCategoryBean = new DiscoverCategoryBean(substring, _list);
@@ -268,9 +275,9 @@ void getNewSongFromNet(BuildContext context){
 
 
   httpRequest.get(path: "/top/song").then((response) {
-    List<SongListItemBean> _list = List();
+    List<SongItemBean> _list = List();
     response.data["data"].sublist(0,15).map((result) {
-      _list.add(SongListItemBean.fromNewSongJson(result));
+      _list.add(SongItemBean.fromNewSongJson(result));
     }).toList();
     //print(_list.length.toString());
 
@@ -289,5 +296,37 @@ void getNewAlbumFromNet(BuildContext context){
     //print(_list.length.toString());
 
     context.bloc<DiscoverNewAlbumCubit>().setList(_list);
+  });
+}
+
+void getRankData(BuildContext context){
+  int getRankLimit = 5;
+  List<DiscoverRankBean> _list = List();
+  int currentIndex = 0;
+  //获取排行榜id
+  httpRequest.get(path: "/toplist").then((response) {
+    response.data["list"].sublist(0,getRankLimit).map((result) {
+      DiscoverRankBean bean = DiscoverRankBean();
+      bean.name = result["name"];
+      bean.id = result["id"].toString();
+      _list.add(bean);
+      //获取排行榜详情列表
+      httpRequest.get(path: "/playlist/detail",parameters: {"id":bean.id}).then((response) {
+        List<SongItemBean> songItemBeans = List();
+        response.data["playlist"]["tracks"].sublist(0,3).map((result) {
+          var songItemBean = SongItemBean.fromRankJson(result);
+          songItemBeans.add(songItemBean);
+        }).toList();
+        bean.topThree = songItemBeans;
+        if (++currentIndex == getRankLimit) {
+          //如果全部获取完成
+          print(_list.toString());
+          context.bloc<DiscoverRankCubit>().setList(_list);
+        }
+      });
+
+    }).toList();
+
+
   });
 }

@@ -48,7 +48,7 @@ class _SwitchAnimBottomNaviBarWidgetState
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: widget.barHeight,
             child: _KeepStateWidget(
               child: Container(
                 color: Colors.white,

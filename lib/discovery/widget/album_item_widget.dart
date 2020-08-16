@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/album_list_item_bean.dart';
-import 'package:cloudmusic/discovery/bean/song_list_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
