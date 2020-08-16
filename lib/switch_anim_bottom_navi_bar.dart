@@ -48,7 +48,7 @@ class _SwitchAnimBottomNaviBarWidgetState
             top: 0,
             left: 0,
             right: 0,
-            bottom: widget.barHeight,
+            bottom: 0,
             child: _KeepStateWidget(
               child: Container(
                 color: Colors.white,
@@ -66,7 +66,23 @@ class _SwitchAnimBottomNaviBarWidgetState
               ),
             )
         ),
-
+        //模糊效果
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: widget.barHeight,
+          child: ClipRect(
+            child: BackdropFilter(
+              filter:  ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Container(
+                color: HexColor.fromHex("#F8F8F8").withOpacity(0.8),
+                //width: 100,
+                //height: widget.barHeight,
+              ),
+            ),
+          ),
+        ),
 
         Positioned(
           left: 0,
@@ -74,7 +90,7 @@ class _SwitchAnimBottomNaviBarWidgetState
           bottom: 0,
           height: widget.barHeight,
           child: Container(
-            color: HexColor.fromHex("#F8F8F8"),
+            color: HexColor.fromHex("#F8F8F8").withAlpha(225),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -96,24 +112,7 @@ class _SwitchAnimBottomNaviBarWidgetState
           ),
 
         ),
-        Positioned(
-          left: 10,
-          bottom: 0,
-          width: 100,
-          height: 100,
-          child: Container(
-            width: 100,
-            height: 100,
-            child: BackdropFilter(
 
-              filter:  ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.white,
-                height: widget.barHeight,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

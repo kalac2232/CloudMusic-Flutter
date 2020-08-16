@@ -1,6 +1,6 @@
 
 import 'package:flutter_screenutil/screenutil.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'generated/r.dart';
@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
 
           ),
         ],
-        barHeight: 50,
+        barHeight: 50.h,
       ),
     );
   }

@@ -21,4 +21,5 @@ class R {
 	static const String images_cm6_play_icon_red_play = "assets/images/cm6_play_icon_red_play.png";
 	static const String images_cm2_icn_sq_15 = "assets/images/cm2_icn_sq_15.png";
 	static const String images_cm5_list_icn_exclusive = "assets/images/cm5_list_icn_exclusive.png";
+	static const String images_cml_activity_album_blackTape = "assets/images/cml_activity_album_blackTape.png";
 }

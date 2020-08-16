@@ -2,6 +2,7 @@ import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
 import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_new_album_song_widget.dart';
+import 'package:cloudmusic/discovery/widget/discover_rank_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
@@ -96,6 +97,11 @@ class _WrapDisCoverPage extends StatelessWidget{
                         Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27.h)),
                         Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
                         Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.h)),
+                        Padding(child: DiscoverRankWidget(),padding: EdgeInsets.only(top:34.h)),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50.h,
+                        )
                       ],
                     ),
                   )

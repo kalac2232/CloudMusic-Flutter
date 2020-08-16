@@ -22,6 +22,14 @@ class AlbumItemWidget extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
+            left: 59,
+            child: Container(
+              width: 10.w,
+              height: 60.w,
+              child: Image.asset(R.images_cml_activity_album_blackTape),
+            ),
+          ),
+          Positioned(
             left: 0,
             child: Container(
               decoration: BoxDecoration(
@@ -37,7 +45,7 @@ class AlbumItemWidget extends StatelessWidget {
           ),
           Positioned(
             width: 210.w,
-            left: 71.w,
+            left: 81.w,
             top: 7.h,
             child: Row(
               children: <Widget>[
@@ -67,7 +75,7 @@ class AlbumItemWidget extends StatelessWidget {
           ),
           Positioned(
             bottom: 10.h,
-            left: 70.w,
+            left: 80.w,
             child: _getSubtitle(Random().nextInt(4)),
           )
         ],
