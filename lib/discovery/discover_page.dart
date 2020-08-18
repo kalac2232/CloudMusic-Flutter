@@ -1,7 +1,9 @@
 import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
 import 'package:cloudmusic/discovery/bean/discover_rank_bean.dart';
 import 'package:cloudmusic/discovery/bean/song_list_bean.dart';
+import 'package:cloudmusic/discovery/bloc/cubit/bottom_refresh_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_rank_cubit.dart';
+import 'package:cloudmusic/discovery/widget/bottom_refresh_widget.dart';
 import 'package:cloudmusic/discovery/widget/category_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_new_album_song_widget.dart';
 import 'package:cloudmusic/discovery/widget/discover_rank_widget.dart';
@@ -56,29 +58,55 @@ class DisCoverPage extends StatelessWidget {
         BlocProvider<DiscoverRankCubit>(
           create: (BuildContext context) => DiscoverRankCubit(),
         ),
+        BlocProvider<BottomRefreshCubit>(
+          create: (BuildContext context) => BottomRefreshCubit(),
+        ),
       ],
       child: _WrapDisCoverPage(),
     );
   }
 }
 
-class _WrapDisCoverPage extends StatelessWidget{
+class _WrapDisCoverPage extends StatefulWidget {
+  @override
+  _WrapDisCoverPageState createState() => _WrapDisCoverPageState();
+}
+
+class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
+
+
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+
+
+      if (_scrollController.offset > _scrollController.position.maxScrollExtent) {
+
+        context.bloc<BottomRefreshCubit>().setOffset(_scrollController.offset - _scrollController.position.maxScrollExtent);
+
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //获取banner
     getBannerFromNet(context);
     //获取推荐歌单
-    getRecommendListFromNet(context);
+    //getRecommendListFromNet(context);
     //获取某种歌曲列表及标题
-    getCategoryListFromNet(context);
+    //getCategoryListFromNet(context);
     //获取新歌推荐
-    getNewSongFromNet(context);
+    //getNewSongFromNet(context);
     //获取新碟
-    getNewAlbumFromNet(context);
+    //getNewAlbumFromNet(context);
     //获取排行榜
-    getRankData(context);
+    //getRankData(context);
 
-    //context.bloc<DiscoverNewCategoryBloc>().add(DiscoverNewCategoryEvent.newAlbum);
+
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -95,6 +123,8 @@ class _WrapDisCoverPage extends StatelessWidget{
               bottom: 0,
               width: MediaQuery.of(context).size.width,
               child: CustomScrollView(
+                physics: BouncingScrollPhysics(),
+                controller: _scrollController,
                 slivers: <Widget>[
                   SliverToBoxAdapter(
                     child: Column(
@@ -105,10 +135,7 @@ class _WrapDisCoverPage extends StatelessWidget{
                         Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
                         Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.h)),
                         Padding(child: DiscoverRankWidget(),padding: EdgeInsets.only(top:34.h)),
-//                        SizedBox(
-//                          width: double.infinity,
-//                          height: 50.h,
-//                        )
+                        BottomRefreshWidget()
                       ],
                     ),
                   )
@@ -121,6 +148,10 @@ class _WrapDisCoverPage extends StatelessWidget{
       ),
     );
   }
+
+}
+
+void getDate() {
 
 }
 
