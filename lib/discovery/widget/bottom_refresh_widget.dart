@@ -23,6 +23,7 @@ class _BottomRefreshWidgetState extends State<BottomRefreshWidget> with TickerPr
 //        //print(rotate);
 //      });
     });
+    //todo 旋转未完成
 
     return Container(
       height: 100.h,
@@ -43,7 +44,7 @@ class _BottomRefreshWidgetState extends State<BottomRefreshWidget> with TickerPr
                 //print(offset); //打印滚动位置
                 return CustomPaint(
                   size: Size(28.w, 28.h), //指定画布大小
-                  painter: MyPainter(rotate ,offset),
+                  painter: MyPainter(offset),
                 );
               }
             ),
@@ -56,7 +57,6 @@ class _BottomRefreshWidgetState extends State<BottomRefreshWidget> with TickerPr
 
 class MyPainter extends CustomPainter {
   double offset;
-  double rotate;
 
   //小箭头上边的透明距离限制
   static const double alphaLimit = 15;
@@ -65,7 +65,7 @@ class MyPainter extends CustomPainter {
   static const double maxOffsetLimit = 70;
 
 
-  MyPainter(this.rotate,this.offset);
+  MyPainter(this.offset);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -77,7 +77,7 @@ class MyPainter extends CustomPainter {
       this.offset = maxOffsetLimit;
 
       //print(rotate);
-      canvas.rotate(rotate);
+      //canvas.rotate(rotate);
     }
 
 
