@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
+import 'discovery/daily_recommend_page.dart';
 import 'home_page.dart';
 import 'commen/utils/hex_color.dart';
 
@@ -19,12 +20,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      initialRoute:"/", //名为"/"的路由作为应用的home(首页)
+
       theme: ThemeData(
         primaryColor: HexColor.fromHex("#FF1F14"),
       ),
-      home: Scaffold(
-        body: HomePage(),
-      ),
+      //注册路由表
+      routes:{
+        "/":(context) => Scaffold(
+          body: HomePage(),
+        ),
+        "daily_recommend_page":(context) => Scaffold(
+          body: DailyRecommendPage(),
+        ),
+      },
+//      home: Scaffold(
+//        body: HomePage(),
+//      ),
     );
   }
 
