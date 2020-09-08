@@ -87,7 +87,7 @@ class _SwitchAnimBottomNaviBarWidgetState
         Positioned(
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: 0 + MediaQuery.of(context).padding.bottom / 4,
           height: widget.barHeight,
           child: Container(
             color: HexColor.fromHex("#F8F8F8").withAlpha(225),

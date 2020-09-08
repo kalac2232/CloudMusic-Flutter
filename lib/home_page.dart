@@ -14,6 +14,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     print("HomePage");
     ScreenUtil.init(context, width: 375, height: 667);
+
+    createPlayerWidget(context);
+
+
+
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
@@ -60,6 +65,33 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+void createPlayerWidget(BuildContext context) {
+
+  //创建一个OverlayEntry对象
+  OverlayEntry overlayEntry = new OverlayEntry(builder: (context) {
+    //外层使用Positioned进行定位，控制在Overlay中的位置
+    return Positioned(
+      width: 30.w,
+      height: 30.h,
+      right: 12.w,
+      top: 7.h + MediaQuery.of(context).padding.top,
+      child: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: HexColor.fromHex("#949595")
+        ),
+      ),
+    );
+  });
+  //往Overlay中插入插入OverlayEntry
+
+
+  new Future.delayed(Duration(seconds: 2)).then((value) {
+    Overlay.of(context).insert(overlayEntry);
+  });
+
 }
 
 

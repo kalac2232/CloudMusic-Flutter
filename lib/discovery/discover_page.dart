@@ -108,6 +108,7 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
 
 
     return SafeArea(
+      bottom: false,
       child: Container(
         color: Colors.white,
         child: Stack(
@@ -167,20 +168,20 @@ class MainTopBar extends StatelessWidget {
         children: <Widget>[
           Positioned(
             left: 16.w,
-            top: 8,
-            width: 28,
-            height: 28,
+            top: 8.h,
+            width: 28.w,
+            height: 28.h,
             child: Image.asset(R.images_cm6_nav_icn_mic),
           ),
           Positioned(
             //搜索框
             child: Container(
-              width: 260,
-              height: 36,
+              width: 260.w,
+              height: 36.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: HexColor.fromHex("#F7F7F7"),
-                borderRadius: BorderRadius.circular(18.0), //3像素圆角
+                borderRadius: BorderRadius.circular(18.h), //3像素圆角
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -200,17 +201,7 @@ class MainTopBar extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            width: 30,
-            height: 30,
-            right: 12,
-            child: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: HexColor.fromHex("#949595")
-              ),
-            ),
-          )
+
         ],
       ),
     );
