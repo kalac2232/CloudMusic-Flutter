@@ -44,7 +44,9 @@ class DailyRecommendPage extends StatelessWidget {
     );
   }
 }
-
+///
+/// 滑动组件生成代理
+///
 class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double topBarHeight;
   final double buttonBarHeight;
@@ -88,11 +90,11 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
               height: this.expandedHeight,
               child: Container(
                   child: Image.asset(this.coverImgUrl, fit: BoxFit.cover))),
+          //日历
           Positioned(
             left: 16.w,
             right: 0,
             bottom: 70.h,
-
             child: Container(
                 height: 82.h,
                 width: 109.w,
@@ -123,6 +125,7 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
                     topRight: Radius.circular(20)), //3像素圆角
               ),
               height: buttonBarHeight,
+              child: _Buttons(),
             ),
           ),
           Positioned(
@@ -226,6 +229,10 @@ class _Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var day = DateTime.now().day;
+    var month = DateTime.now().month;
+
     return Opacity(
       opacity: opacity,
       child: Stack(
@@ -239,12 +246,29 @@ class _Calendar extends StatelessWidget {
                   color: Colors.white.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(14.h),
                 ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Positioned(
+                      left: 12.w,
+                        child: Text("历史日推",style: TextStyle(
+                      fontSize: 14.sp,
+                      color: HexColor.fromHex("#333333"),
+                    ),)),
+                    Positioned(
+                      right: 8.w,
+                        width: 27.w,
+                        height: 14.h,
+                        child: Image.asset(R.images_icn_black_vip)
+                    )
+                  ],
+                ),
               )),
           Positioned(
               left: 12.w,
               bottom: 31.h,
               child: Text(
-                "22",
+                day < 10 ? "0$day":day.toString(),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 44,
@@ -254,7 +278,7 @@ class _Calendar extends StatelessWidget {
               left: 59.w,
               bottom: 35.h,
               child: Text(
-                "/  09",
+                month < 10 ? "/  0$month" :"/  $month",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 21,
@@ -262,6 +286,23 @@ class _Calendar extends StatelessWidget {
               )),
         ],
       ),
+    );
+  }
+}
+
+class _Buttons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Positioned(
+          left: 11.w,
+          width: 20.w,
+          height: 20.h,
+          child: Image.asset(R.images_list_icn_play),
+        )
+      ],
     );
   }
 }

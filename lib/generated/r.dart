@@ -25,4 +25,7 @@ class R {
 	static const String images_cm6_daily_banner = "assets/images/cm6_daily_banner.png";
 	static const String images_act_view_btn_back = "assets/images/act_view_btn_back.png";
 	static const String images_rcd_qmark = "assets/images/rcd_qmark.png";
+	static const String images_icn_black_vip = "assets/images/icn_black_vip.png";
+	static const String images_list_icn_multi = "assets/images/list_icn_multi.png";
+	static const String images_list_icn_play = "assets/images/list_icn_play.png";
 }

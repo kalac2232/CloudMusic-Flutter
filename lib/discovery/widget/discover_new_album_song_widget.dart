@@ -20,7 +20,7 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
     return BlocBuilder<DiscoverNewCategoryBloc, DiscoverNewCategoryEvent>(
       builder: (BuildContext context, DiscoverNewCategoryEvent state) {
         return Container(
-          height: 238.h,
+          height: 238.w,
           child: Stack(
             children: <Widget>[
               Positioned(
@@ -36,7 +36,7 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
                   child: Text(
                     "新歌",
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         color: state == DiscoverNewCategoryEvent.newSong?HexColor.fromHex("#000000"):HexColor.fromHex("#9C9C9C"),
                         fontWeight: FontWeight.bold),
                   ),
@@ -47,7 +47,7 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
                 top: 6.h,
                 child: Container(
                   width: 1,
-                  height: 16.h,
+                  height: 16.w,
                   color: HexColor.fromHex("#E6E6E6"),
                 ),
               ),
@@ -64,7 +64,7 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
                   child: Text(
                     "新碟",
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         color: state == DiscoverNewCategoryEvent.newAlbum?HexColor.fromHex("#000000"):HexColor.fromHex("#9C9C9C"),
                         fontWeight: FontWeight.bold),
                   ),
@@ -72,26 +72,26 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
               ),
               //加载更多按钮
               Positioned(
-                right: 16,
+                right: 16.w,
                 top: 0,
                 child: Container(
-                  width: 76,
-                  height: 25,
+                  width: 76.w,
+                  height: 25.w,
                   decoration: BoxDecoration(
                       border: Border.all(
                           color: HexColor.fromHex("#E6E6E6"), width: 1),
-                      borderRadius: BorderRadius.circular(12.5)),
+                      borderRadius: BorderRadius.circular(12.5.w)),
                   alignment: Alignment.center,
                   child: Text(
                     state == DiscoverNewCategoryEvent.newSong?"更多新歌":"更多新碟",
                     style: TextStyle(
-                        color: HexColor.fromHex("#333333"), fontSize: 13),
+                        color: HexColor.fromHex("#333333"), fontSize: 13.sp),
                   ),
                 ),
               ),
               Positioned(
-                top: 38.h,
-                height: 200.h,
+                top: 38.w,
+                height: 200.w,
                 width: MediaQuery.of(context).size.width,
                 child: state == DiscoverNewCategoryEvent.newSong?_getNewSongWidget():_getNewAlbumWidget(),
               )

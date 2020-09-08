@@ -12,7 +12,7 @@ class DiscoverRankWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 277.h,
+      height: 277.w,
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -21,33 +21,33 @@ class DiscoverRankWidget extends StatelessWidget{
             child: Text(
               "热歌风向标",
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   color: HexColor.fromHex("#000000"),
                   fontWeight: FontWeight.bold),
             ),
           ),
           //加载更多按钮
           Positioned(
-            right: 16,
+            right: 16.w,
             top: 0,
             child: Container(
-              width: 76,
-              height: 25,
+              width: 76.w,
+              height: 25.w,
               decoration: BoxDecoration(
                   border: Border.all(
                       color: HexColor.fromHex("#E6E6E6"), width: 1),
-                  borderRadius: BorderRadius.circular(12.5)),
+                  borderRadius: BorderRadius.circular(12.5.w)),
               alignment: Alignment.center,
               child: Text(
                 "查看更多",
                 style: TextStyle(
-                    color: HexColor.fromHex("#333333"), fontSize: 13),
+                    color: HexColor.fromHex("#333333"), fontSize: 13.sp),
               ),
             ),
           ),
           Positioned(
-            top: 38.h,
-            height: 240.h,
+            top: 38.w,
+            height: 240.w,
             width: MediaQuery.of(context).size.width,
             child: BlocBuilder<DiscoverRankCubit, List<DiscoverRankBean>>(
               builder: (BuildContext context, List<DiscoverRankBean> state) {
@@ -88,7 +88,7 @@ class _RankPage extends StatelessWidget {
                 ),
                 Positioned(
                   left: 10.w,
-                  top: 18.h,
+                  top: 18.w,
                   child: Text(bean.name,style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -96,23 +96,23 @@ class _RankPage extends StatelessWidget {
                   ),),
                 ),
                 Positioned(
-                  top: 60.h,
+                  top: 60.w,
                   left: 10.w,
-                  height: 50.h,
+                  height: 50.w,
                   width: 313.w,
                   child: _Item(index: 1, bean: this.bean.topThree[0]),
                 ),
                 Positioned(
-                  top: 120.h,
+                  top: 120.w,
                   left: 10.w,
                   height: 50.h,
                   width: 313.w,
                   child: _Item(index: 2, bean: this.bean.topThree[1]),
                 ),
                 Positioned(
-                  top: 180.h,
+                  top: 180.w,
                   left: 10.w,
-                  height: 50.h,
+                  height: 50.w,
                   width: 313.w,
                   child: _Item(index: 3, bean: this.bean.topThree[2]),
                 ),
@@ -137,7 +137,7 @@ class _Item extends StatelessWidget {
       children: <Widget>[
         Positioned(
           width: 50.w,
-          height: 50.h,
+          height: 50.w,
           left: 0,
           child: Container(
             decoration: BoxDecoration(

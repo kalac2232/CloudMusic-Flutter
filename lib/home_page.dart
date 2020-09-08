@@ -74,9 +74,9 @@ void createPlayerWidget(BuildContext context) {
     //外层使用Positioned进行定位，控制在Overlay中的位置
     return Positioned(
       width: 30.w,
-      height: 30.h,
+      height: 30.w,
       right: 12.w,
-      top: 7.h + MediaQuery.of(context).padding.top,
+      top: 7.w + MediaQuery.of(context).padding.top,
       child: Container(
         decoration: BoxDecoration(
             shape: BoxShape.circle,

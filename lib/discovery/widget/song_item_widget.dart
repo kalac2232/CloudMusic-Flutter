@@ -15,7 +15,7 @@ class SongItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60.h,
+      height: 60.w,
       width: 341.w,
       child: Stack(
         alignment: Alignment.center,
@@ -38,7 +38,7 @@ class SongItemWidget extends StatelessWidget {
             right: 22.w,
             child: Container(
               width: 25.w,
-              height: 25.h,
+              height: 25.w,
               decoration: BoxDecoration(
                   border:
                   Border.all(color: HexColor.fromHex("#E6E6E6"), width: 1),
@@ -46,14 +46,14 @@ class SongItemWidget extends StatelessWidget {
               child: Image.asset(
                 R.images_cm6_play_icon_red_play,
                 width: 25.w,
-                height: 25.h,
+                height: 25.w,
               ),
             ),
           ),
           Positioned(
             width: 210.w,
             left: 71.w,
-            top: 7.h,
+            top: 7.w,
             child: Row(
               children: <Widget>[
                 Container(
@@ -81,7 +81,7 @@ class SongItemWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 10.h,
+            bottom: 10.w,
             left: 70.w,
             child: _getSubtitle(Random().nextInt(4)),
           )
@@ -102,7 +102,7 @@ Widget _getSubtitle(int type) {
       ),
       child: Text("超"+ (60+Random().nextInt(40)).toString() +"%人播放",style: TextStyle(
         color: HexColor.fromHex("#FF3A3A"),
-        fontSize: 9,
+        fontSize: 9.sp,
       ),),
     );
   }
@@ -111,12 +111,12 @@ Widget _getSubtitle(int type) {
     return Container(
       child: Row(
         children: <Widget>[
-          Image.asset(R.images_cm2_icn_sq_15,width: 18.w,height: 14.h,color: HexColor.fromHex("#FF3A3A"),),
+          Image.asset(R.images_cm2_icn_sq_15,width: 18.w,height: 14.w,color: HexColor.fromHex("#FF3A3A"),),
           Padding(
             padding: EdgeInsets.only(left: 4.w),
             child: Text("有心栽花花不开 无心插柳柳成荫",style: TextStyle(
                 color: HexColor.fromHex("#999999"),
-                fontSize: 12
+                fontSize: 12.sp
             ),),
           )
         ],
@@ -128,12 +128,12 @@ Widget _getSubtitle(int type) {
     return Container(
       child: Row(
         children: <Widget>[
-          Image.asset(R.images_cm5_list_icn_exclusive,width: 22.w,height: 11.h,color: HexColor.fromHex("#FF3A3A"),),
+          Image.asset(R.images_cm5_list_icn_exclusive,width: 22.w,height: 11.w,color: HexColor.fromHex("#FF3A3A"),),
           Padding(
             padding: EdgeInsets.only(left: 4.w,bottom: 1.h),
             child: Text("有心栽花花不开 无心插柳柳成荫",style: TextStyle(
                 color: HexColor.fromHex("#999999"),
-                fontSize: 12
+                fontSize: 12.sp
             ),),
           )
         ],
@@ -145,7 +145,7 @@ Widget _getSubtitle(int type) {
     return Container(
       child: Text("有心栽花花不开 无心插柳柳成荫",style: TextStyle(
           color: HexColor.fromHex("#999999"),
-          fontSize: 12
+          fontSize: 12.sp
       ),),
     );
   }

@@ -96,15 +96,15 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
     //获取banner
     getBannerFromNet(context);
     //获取推荐歌单
-    //getRecommendListFromNet(context);
+    getRecommendListFromNet(context);
     //获取某种歌曲列表及标题
-    //getCategoryListFromNet(context);
+    getCategoryListFromNet(context);
     //获取新歌推荐
-    //getNewSongFromNet(context);
+    getNewSongFromNet(context);
     //获取新碟
-    //getNewAlbumFromNet(context);
+    getNewAlbumFromNet(context);
     //获取排行榜
-    //getRankData(context);
+    getRankData(context);
 
 
     return SafeArea(
@@ -120,7 +120,7 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
                 child: MainTopBar()
             ),
             Positioned(
-              top: 44.h,
+              top: 44.w,
               bottom: 0,
               width: MediaQuery.of(context).size.width,
               child: CustomScrollView(
@@ -130,12 +130,12 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
                   SliverToBoxAdapter(
                     child: Column(
                       children: <Widget>[
-                        Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16.h),),
+                        Padding(child: BannerWidget(),padding: EdgeInsets.only(top:16.w),),
                         DragBollButtons(),
-                        Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27.h)),
-                        Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.h)),
-                        Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.h)),
-                        Padding(child: DiscoverRankWidget(),padding: EdgeInsets.only(top:34.h)),
+                        Padding(child: RecommendListWidget(),padding: EdgeInsets.only(top:27.w)),
+                        Padding(child: CategorySongWidget(),padding: EdgeInsets.only(top:34.w)),
+                        Padding(child: DiscoverNewAlbumAndSongWidget(),padding: EdgeInsets.only(top:34.w)),
+                        Padding(child: DiscoverRankWidget(),padding: EdgeInsets.only(top:34.w)),
                         BottomRefreshWidget()
                       ],
                     ),
@@ -161,16 +161,16 @@ class MainTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 44.h,
+      height: 44.w,
       width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
             left: 16.w,
-            top: 8.h,
+            top: 8.w,
             width: 28.w,
-            height: 28.h,
+            height: 28.w,
             child: Image.asset(R.images_cm6_nav_icn_mic),
           ),
           Positioned(
@@ -181,20 +181,20 @@ class MainTopBar extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: HexColor.fromHex("#F7F7F7"),
-                borderRadius: BorderRadius.circular(18.h), //3像素圆角
+                borderRadius: BorderRadius.circular(18.w), //3像素圆角
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0.0,0.0,1.0,0.0),
-                    child: Image.asset(R.images_3dTouchSearch,width: 22.5,height: 22.5,color: HexColor.fromHex("#949595"),),
+                    child: Image.asset(R.images_3dTouchSearch,width: 22.5.w,height: 22.5.w,color: HexColor.fromHex("#949595"),),
                   ),
                   Text(
                     "Collide - Jake Miller",
                     style: TextStyle(
                         color: HexColor.fromHex("#C6C6C6"),
-                        fontSize: 14
+                        fontSize: 14.sp
                     ),
                   )
                 ],

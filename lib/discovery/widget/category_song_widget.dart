@@ -13,7 +13,7 @@ class CategorySongWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 238.h,
+      height: 238.w,
       child: BlocBuilder<DiscoverCategoryCubit, DiscoverCategoryBean>(
         builder: (context,state) {
           return state == null ? Container():Stack(
@@ -35,7 +35,7 @@ class CategorySongWidget extends StatelessWidget {
                 top: 0,
                 child: Container(
                   width: 91.w,
-                  height: 25.h,
+                  height: 25.w,
                   decoration: BoxDecoration(
                       border:
                       Border.all(color: HexColor.fromHex("#E6E6E6"), width: 1),
@@ -50,7 +50,7 @@ class CategorySongWidget extends StatelessWidget {
                             R.images_cm6_play_icon_red_play,
                             color: HexColor.fromHex("#333333"),
                             width: 25.w,
-                            height: 25.h,
+                            height: 25.w,
                           )),
                       Positioned(
                         left: 27.w,
@@ -65,8 +65,8 @@ class CategorySongWidget extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 38.h,
-                height: 200.h,
+                top: 38.w,
+                height: 200.w,
                 width: MediaQuery.of(context).size.width,
                 child: DiscoverSongListPageView<SongItemBean>(
                   list: state.list,

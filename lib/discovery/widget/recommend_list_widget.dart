@@ -32,7 +32,7 @@ class RecommendListWidget extends StatelessWidget {
         var randomTitle = titles[math.Random().nextInt(5)];
 
         return Container(
-          height: 183.h,
+          height: 183.w,
           child: Stack(
             children: <Widget>[
               Positioned(
@@ -41,37 +41,37 @@ class RecommendListWidget extends StatelessWidget {
                 child: Text(
                   randomTitle,
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: HexColor.fromHex("#000000"),
                       fontWeight: FontWeight.bold),
                 ),
               ),
               //加载更多按钮
               Positioned(
-                right: 16,
+                right: 16.w,
                 top: 0,
                 child: Container(
-                  width: 76,
-                  height: 25,
+                  width: 76.w,
+                  height: 25.w,
                   decoration: BoxDecoration(
                       border: Border.all(
                           color: HexColor.fromHex("#E6E6E6"), width: 1),
-                      borderRadius: BorderRadius.circular(12.5)),
+                      borderRadius: BorderRadius.circular(12.5.w)),
                   alignment: Alignment.center,
                   child: Text(
                     "查看更多",
                     style: TextStyle(
-                        color: HexColor.fromHex("#333333"), fontSize: 13),
+                        color: HexColor.fromHex("#333333"), fontSize: 13.sp),
                   ),
                 ),
               ),
               //歌单listview
               Positioned(
-                top: 38.h,
+                top: 38.w,
                 width: MediaQuery.of(context).size.width,
-                height: 146.h,
+                height: 146.w,
                 child: state.isEmpty ? Container():ListView.separated(
-                  padding: EdgeInsets.only(left: 16),
+                  padding: EdgeInsets.only(left: 16.w),
                   //6 + 1 多一个查看更多
                   itemCount: 7,
                   physics: BouncingScrollPhysics1(),
@@ -86,7 +86,7 @@ class RecommendListWidget extends StatelessWidget {
                     return Container(
                       //color: Colors.red,
                       width: 105.w,
-                      height: 145.h,
+                      height: 145.w,
                       child: Stack(
                         children: <Widget>[
                           Positioned(
@@ -123,7 +123,7 @@ class RecommendListWidget extends StatelessWidget {
                           ),
                           Positioned(
                             width: 105.w,
-                            top: 111.h,
+                            top: 111.w,
                             child: Text(
                               state[index].name,
                               maxLines: 2,
@@ -158,7 +158,7 @@ class RecommendListWidget extends StatelessWidget {
     return Container(
       //color: Colors.red,
       width: 70.w,
-      height: 145.h,
+      height: 145.w,
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -185,7 +185,7 @@ class RecommendListWidget extends StatelessWidget {
                         "左滑更多",
 
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           color: HexColor.fromHex("#C7C7C7")
                         ),
                       ),
