@@ -1,7 +1,7 @@
 
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/discover_rank_bean.dart';
-import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_rank_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -125,7 +125,7 @@ class _RankPage extends StatelessWidget {
 
 class _Item extends StatelessWidget {
   int index;
-  SongItemBean bean;
+  SongBean bean;
 
 
   _Item({@required this.index, @required this.bean});
@@ -174,7 +174,7 @@ class _Item extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  " - " + bean.author,
+                  " - " + bean.getArtistsStr(),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(

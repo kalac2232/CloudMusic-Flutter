@@ -1,6 +1,6 @@
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/album_list_item_bean.dart';
-import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_new_album_cubit.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_new_category_bloc.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_new_song_cubit.dart';
@@ -104,12 +104,12 @@ class DiscoverNewAlbumAndSongWidget extends StatelessWidget {
   }
 
   Widget _getNewSongWidget() {
-    return BlocBuilder<DiscoverNewSongCubit,List<SongItemBean>>(
-      builder: (context, List<SongItemBean> state) {
+    return BlocBuilder<DiscoverNewSongCubit,List<SongBean>>(
+      builder: (context, List<SongBean> state) {
 
-        return DiscoverSongListPageView<SongItemBean>(
+        return DiscoverSongListPageView<SongBean>(
           list: state,
-          itemBuilder: (BuildContext context, SongItemBean bean) {
+          itemBuilder: (BuildContext context, SongBean bean) {
             return SongItemWidget(bean:bean);
         },);
     },);

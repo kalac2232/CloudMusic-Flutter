@@ -1,6 +1,6 @@
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/discover_category_bean.dart';
-import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/discover_category_cubit.dart';
 import 'package:cloudmusic/discovery/widget/discover_songlist_pagerview.dart';
 import 'package:cloudmusic/discovery/widget/song_item_widget.dart';
@@ -68,9 +68,9 @@ class CategorySongWidget extends StatelessWidget {
                 top: 38.w,
                 height: 200.w,
                 width: MediaQuery.of(context).size.width,
-                child: DiscoverSongListPageView<SongItemBean>(
+                child: DiscoverSongListPageView<SongBean>(
                   list: state.list,
-                  itemBuilder: (BuildContext context, SongItemBean bean) {
+                  itemBuilder: (BuildContext context, SongBean bean) {
                     return SongItemWidget(bean:bean);
                   },),
               )

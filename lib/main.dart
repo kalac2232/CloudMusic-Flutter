@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(
         primaryColor: HexColor.fromHex("#FF1F14"),
+        platform: TargetPlatform.iOS,
       ),
       //注册路由表
       routes:{

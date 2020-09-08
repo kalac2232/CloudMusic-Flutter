@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:cloudmusic/commen/utils/hex_color.dart';
-import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SongItemWidget extends StatelessWidget {
-  SongItemBean bean;
+  SongBean bean;
 
 
   SongItemWidget({this.bean});
@@ -70,7 +70,7 @@ class SongItemWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    " - " + bean.author,
+                    " - " + bean.getArtistsStr(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(

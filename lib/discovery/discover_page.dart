@@ -14,7 +14,7 @@ import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/banner_bean.dart';
 import 'package:cloudmusic/discovery/bean/recommend_list_bean.dart';
 import 'bean/album_list_item_bean.dart';
-import 'bean/song_item_bean.dart';
+import 'bean/song_bean.dart';
 import 'bloc/cubit/discover_category_cubit.dart';
 import 'bloc/cubit/discover_new_album_cubit.dart';
 import 'bloc/cubit/discover_new_category_bloc.dart';
@@ -94,17 +94,17 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
   @override
   Widget build(BuildContext context) {
     //获取banner
-    getBannerFromNet(context);
+    _getBannerFromNet(context);
     //获取推荐歌单
-    getRecommendListFromNet(context);
+    //_getRecommendListFromNet(context);
     //获取某种歌曲列表及标题
-    getCategoryListFromNet(context);
+    //_getCategoryListFromNet(context);
     //获取新歌推荐
-    getNewSongFromNet(context);
+    //_getNewSongFromNet(context);
     //获取新碟
-    getNewAlbumFromNet(context);
+    //_getNewAlbumFromNet(context);
     //获取排行榜
-    getRankData(context);
+    //_getRankData(context);
 
 
     return SafeArea(
@@ -245,7 +245,7 @@ class DragBollButtons extends StatelessWidget {
 
 
 
-void getBannerFromNet(BuildContext context){
+void _getBannerFromNet(BuildContext context){
   List<BannerBean> _bannerBeans = List();
 
   httpRequest.get(path: "/banner", parameters: {"type": 2}).then((response) {
@@ -258,7 +258,7 @@ void getBannerFromNet(BuildContext context){
   });
 }
 
-void getRecommendListFromNet(BuildContext context){
+void _getRecommendListFromNet(BuildContext context){
   List<RecommendListBean> _list = List();
 
   httpRequest.get(path: "/personalized", parameters: {"limit": 6}).then((response) {
@@ -271,7 +271,7 @@ void getRecommendListFromNet(BuildContext context){
   });
 }
 
-void getCategoryListFromNet(BuildContext context){
+void _getCategoryListFromNet(BuildContext context){
 
 
   httpRequest.get(path: "/top/playlist", parameters: {"limit": 1,"cat":"官方"}).then((response) {
@@ -280,9 +280,9 @@ void getCategoryListFromNet(BuildContext context){
     return bean;
   }).then((bean) {
     httpRequest.get(path: "/playlist/detail", parameters: {"id": bean.id}).then((response) {
-      List<SongItemBean> _list = List();
+      List<SongBean> _list = List();
       response.data["playlist"]["tracks"].map((result) {
-        _list.add(SongItemBean.fromCategoryJson(result));
+        _list.add(SongBean.fromCategoryJson(result));
       }).toList();
       var substring = bean.name.substring(1,bean.name.indexOf(']'));
       var discoverCategoryBean = new DiscoverCategoryBean(substring, _list);
@@ -293,13 +293,13 @@ void getCategoryListFromNet(BuildContext context){
   });
 }
 
-void getNewSongFromNet(BuildContext context){
+void _getNewSongFromNet(BuildContext context){
 
 
   httpRequest.get(path: "/top/song").then((response) {
-    List<SongItemBean> _list = List();
+    List<SongBean> _list = List();
     response.data["data"].sublist(0,15).map((result) {
-      _list.add(SongItemBean.fromNewSongJson(result));
+      _list.add(SongBean.fromNewSongJson(result));
     }).toList();
     //print(_list.length.toString());
 
@@ -307,7 +307,7 @@ void getNewSongFromNet(BuildContext context){
   });
 }
 
-void getNewAlbumFromNet(BuildContext context){
+void _getNewAlbumFromNet(BuildContext context){
 
 
   httpRequest.get(path: "/top/album",parameters: {"limit":"15"}).then((response) {
@@ -321,7 +321,7 @@ void getNewAlbumFromNet(BuildContext context){
   });
 }
 
-void getRankData(BuildContext context){
+void _getRankData(BuildContext context){
   int getRankLimit = 5;
   List<DiscoverRankBean> _list = List();
   int currentIndex = 0;
@@ -334,9 +334,9 @@ void getRankData(BuildContext context){
       _list.add(bean);
       //获取排行榜详情列表
       httpRequest.get(path: "/playlist/detail",parameters: {"id":bean.id}).then((response) {
-        List<SongItemBean> songItemBeans = List();
+        List<SongBean> songItemBeans = List();
         response.data["playlist"]["tracks"].sublist(0,3).map((result) {
-          var songItemBean = SongItemBean.fromRankJson(result);
+          var songItemBean = SongBean.fromRankJson(result);
           songItemBeans.add(songItemBean);
         }).toList();
         bean.topThree = songItemBeans;

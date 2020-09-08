@@ -1,14 +1,21 @@
+import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/widget/calendar_ring_widget.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'dart:math' as math;
+class DailyRecommendPage extends StatefulWidget {
+  @override
+  _DailyRecommendPageState createState() => _DailyRecommendPageState();
+}
 
-class DailyRecommendPage extends StatelessWidget {
+class _DailyRecommendPageState extends State<DailyRecommendPage> {
   @override
   Widget build(BuildContext context) {
+
+    _getRecommendList();
 
     return Scaffold(
       body: Container(
@@ -42,6 +49,21 @@ class DailyRecommendPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _getRecommendList() {
+    List<SongBean> list = new List();
+
+    //httpRequest.get(path: "/login/cellphone?phone=17684721017&password=qweasdzxc");
+    httpRequest.get(path: "/recommend/songs").then((response) {
+      response.data["recommend"].map((json) {
+        list.add(SongBean.fromDailyRecommendJson(json));
+      }).toList();
+
+      print(list);
+    });
+
+
   }
 }
 ///
@@ -299,9 +321,41 @@ class _Buttons extends StatelessWidget {
         Positioned(
           left: 11.w,
           width: 20.w,
-          height: 20.h,
+          height: 21.h,
           child: Image.asset(R.images_list_icn_play),
-        )
+        ),
+        Positioned(
+          top: 10.5.h,
+          left: 42.w,
+          child: Text(
+            "播放全部",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize:17.sp,
+              color: HexColor.fromHex("#333333")
+            ),
+          ),
+        ),
+        Positioned(
+
+          right: 45.w,
+          width: 18.w,
+          height: 18.w,
+          child: Image.asset(R.images_list_icn_multi),
+        ),
+        Positioned(
+          top: 13.h,
+          right: 17.w,
+          child: Text(
+            "多选",
+            textAlign: TextAlign.center,
+
+            style: TextStyle(
+                fontSize:14.sp,
+                color: HexColor.fromHex("#333333")
+            ),
+          ),
+        ),
       ],
     );
   }

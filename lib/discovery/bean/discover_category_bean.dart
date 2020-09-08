@@ -1,8 +1,8 @@
-import 'package:cloudmusic/discovery/bean/song_item_bean.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
 
 class DiscoverCategoryBean{
   String name;
-  List<SongItemBean> list;
+  List<SongBean> list;
 
   DiscoverCategoryBean(this.name, this.list);
 
