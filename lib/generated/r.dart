@@ -28,4 +28,7 @@ class R {
 	static const String images_icn_black_vip = "assets/images/icn_black_vip.png";
 	static const String images_list_icn_multi = "assets/images/list_icn_multi.png";
 	static const String images_list_icn_play = "assets/images/list_icn_play.png";
+	static const String images_list_tag_mv = "assets/images/list_tag_mv.png";
+	static const String images_rcd_icn_more = "assets/images/rcd_icn_more.png";
+	static const String images_list_icn_solo = "assets/images/list_icn_solo.png";
 }

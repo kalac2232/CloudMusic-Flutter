@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloudmusic/commen/constant/constant.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HttpRequest {
   static Dio dio;
@@ -30,6 +34,10 @@ class HttpRequest {
       print("连接错误:" + e.error.toString());
       return e;
     }));
+
+    addCookieJar();
+
+
   }
 
   Future get({
@@ -44,6 +52,13 @@ class HttpRequest {
         options: options,
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress);
+  }
+
+  Future<void> addCookieJar() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    var cookieJar = PersistCookieJar(dir:appDocPath+"/.cookies/");
+    dio.interceptors.add(CookieManager(cookieJar));
   }
 }
 

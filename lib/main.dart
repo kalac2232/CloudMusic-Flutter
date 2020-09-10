@@ -1,4 +1,5 @@
 
+import 'package:cloudmusic/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -28,12 +29,15 @@ class MyApp extends StatelessWidget {
       ),
       //注册路由表
       routes:{
+        //主页
         "/":(context) => Scaffold(
           body: HomePage(),
         ),
+        //每日日推
         "daily_recommend_page":(context) => Scaffold(
           body: DailyRecommendPage(),
         ),
+        "player_page":(context) => PlayerPager(),
       },
 //      home: Scaffold(
 //        body: HomePage(),

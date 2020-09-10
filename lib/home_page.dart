@@ -1,11 +1,13 @@
 
+import 'package:cloudmusic/commen/mini_player_widget.dart';
+import 'package:cloudmusic/mine/mine_page.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'generated/r.dart';
 import 'discovery/discover_page.dart';
-import 'page/only_text_pager.dart';
+import 'commen/only_text_pager.dart';
 import 'switch_anim_bottom_navi_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,14 +19,12 @@ class HomePage extends StatelessWidget {
 
     createPlayerWidget(context);
 
-
-
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
           DisCoverPage(),
           OnlyTextPage(text: "页面1",),
-          OnlyTextPage(text: "页面2",),
+          MinePage(),
           OnlyTextPage(text: "页面3",),
           OnlyTextPage(text: "页面4",),
           //OnlyTextPage(text: "页面5",),
@@ -72,18 +72,7 @@ void createPlayerWidget(BuildContext context) {
   //创建一个OverlayEntry对象
   OverlayEntry overlayEntry = new OverlayEntry(builder: (context) {
     //外层使用Positioned进行定位，控制在Overlay中的位置
-    return Positioned(
-      width: 30.w,
-      height: 30.w,
-      right: 12.w,
-      top: 7.w + MediaQuery.of(context).padding.top,
-      child: Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: HexColor.fromHex("#949595")
-        ),
-      ),
-    );
+    return MiniPlayerWidget();
   });
   //往Overlay中插入插入OverlayEntry
 

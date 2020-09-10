@@ -1,21 +1,36 @@
+import 'dart:convert';
+
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/widget/calendar_ring_widget.dart';
+import 'package:cloudmusic/discovery/widget/daily_song_item_widget.dart';
+import 'package:cloudmusic/discovery/widget/song_item_widget.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DailyRecommendPage extends StatefulWidget {
+
   @override
   _DailyRecommendPageState createState() => _DailyRecommendPageState();
 }
 
 class _DailyRecommendPageState extends State<DailyRecommendPage> {
+
+  List<SongBean> songBeanList = new List();
+
+  @override
+  void initState() {
+    super.initState();
+    _getRecommendList();
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    _getRecommendList();
+
 
     return Scaffold(
       body: Container(
@@ -27,20 +42,19 @@ class _DailyRecommendPageState extends State<DailyRecommendPage> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: SliverCustomHeaderDelegate(
-                    topBarHeight: 44.h,
-                    buttonBarHeight: 50.h,
+                    topBarHeight: 44.w,
+                    buttonBarHeight: 50.w,
                     expandedHeight: 188.h,
                     paddingTop: MediaQuery.of(context).padding.top,
                     coverImgUrl: R.images_cm6_daily_banner),
               ),
-              SliverList(
+              (this.songBeanList.isEmpty) ? SliverToBoxAdapter(child: Container(height: 20,width: 20,)):SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                   return Container(
-                    height: 40,
-                    color: Colors.blue,
-                    alignment: Alignment.center,
-                    child: Text(index.toString()),
+                    height: 60.w,
+                    margin: EdgeInsets.only(left: 16.w,right: 16.w),
+                    child: DailySongItemWidget(bean:this.songBeanList[index]),
                   );
                 }, childCount: 20),
               )
@@ -51,17 +65,36 @@ class _DailyRecommendPageState extends State<DailyRecommendPage> {
     );
   }
 
-  void _getRecommendList() {
-    List<SongBean> list = new List();
+  Future<void> _getRecommendList() async {
 
-    //httpRequest.get(path: "/login/cellphone?phone=17684721017&password=qweasdzxc");
-    httpRequest.get(path: "/recommend/songs").then((response) {
-      response.data["recommend"].map((json) {
-        list.add(SongBean.fromDailyRecommendJson(json));
-      }).toList();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      print(list);
+    var dateTime = DateTime.now();
+    //当前年月日，当作key缓存日推数据
+    var todayStr = dateTime.year.toString() + dateTime.month.toString() + dateTime.day.toString();
+
+    String jsonStr = prefs.get("daily_date_" + todayStr);
+    if (jsonStr == null || jsonStr.isEmpty)  {
+
+      var response = await httpRequest.get(path: "/recommend/songs");
+      jsonStr = json.encode(response.data["recommend"]);
+
+      //缓存数据
+      prefs.setString("daily_date_" + todayStr,jsonStr);
+    }
+
+    List list = json.decode(jsonStr);
+
+    list.map((json) {
+      this.songBeanList.add(SongBean.fromDailyRecommendJson(json));
+    }).toList();
+
+
+
+    setState(() {
+
     });
+    //httpRequest.get(path: "/login/cellphone?phone=17684721017&password=qweasdzxc").then((value) => print(value));
 
 
   }
@@ -89,7 +122,7 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
       this.topBarHeight + this.buttonBarHeight + this.paddingTop;
 
   @override
-  double get maxExtent => this.expandedHeight + this.buttonBarHeight - 19.h;
+  double get maxExtent => this.expandedHeight + this.buttonBarHeight - 19.w;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
@@ -116,7 +149,7 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
           Positioned(
             left: 16.w,
             right: 0,
-            bottom: 70.h,
+            bottom: 64.h,
             child: Container(
                 height: 82.h,
                 width: 109.w,
@@ -203,9 +236,9 @@ class _TopBar extends StatelessWidget {
       children: <Widget>[
         Positioned(
           left: 20.w,
-          top: 11.h,
+          top: 11.w,
           width: 12.w,
-          height: 22.h,
+          height: 22.w,
           child: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
