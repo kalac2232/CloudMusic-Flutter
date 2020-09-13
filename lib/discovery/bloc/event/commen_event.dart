@@ -1,0 +1,5 @@
+
+enum MiniPlayerWidgetControlEvent {
+  visible,
+  gone
+}

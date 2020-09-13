@@ -1,10 +1,13 @@
 
 import 'package:cloudmusic/commen/mini_player_widget.dart';
 import 'package:cloudmusic/mine/mine_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
+import 'discovery/bloc/cubit/mini_player_bloc.dart';
+import 'discovery/bloc/event/commen_event.dart';
 import 'generated/r.dart';
 import 'discovery/discover_page.dart';
 import 'commen/only_text_pager.dart';
@@ -16,9 +19,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     print("HomePage");
     ScreenUtil.init(context, width: 375, height: 667);
-
     createPlayerWidget(context);
-
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
@@ -32,8 +33,8 @@ class HomePage extends StatelessWidget {
         naviItems: <NaviItemWidget>[
           NetNaviItemWidget(
             text: "发现",
-              selectedImage: R.images_cm6_btm_icn_discovery_prs,
-              normalImage: R.images_cm6_btm_icn_discovery,
+            selectedImage: R.images_cm6_btm_icn_discovery_prs,
+            normalImage: R.images_cm6_btm_icn_discovery,
 
           ),
           NetNaviItemWidget(
@@ -64,8 +65,12 @@ class HomePage extends StatelessWidget {
         barHeight: 50.h,
       ),
     );
+
   }
 }
+
+
+
 
 void createPlayerWidget(BuildContext context) {
 
@@ -74,10 +79,11 @@ void createPlayerWidget(BuildContext context) {
     //外层使用Positioned进行定位，控制在Overlay中的位置
     return MiniPlayerWidget();
   });
-  //往Overlay中插入插入OverlayEntry
+
 
 
   new Future.delayed(Duration(seconds: 2)).then((value) {
+    //往Overlay中插入插入OverlayEntry
     Overlay.of(context).insert(overlayEntry);
   });
 

@@ -89,10 +89,7 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
 
       }
     });
-  }
 
-  @override
-  Widget build(BuildContext context) {
     //获取banner
     _getBannerFromNet(context);
     //获取推荐歌单
@@ -105,7 +102,10 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
     //_getNewAlbumFromNet(context);
     //获取排行榜
     //_getRankData(context);
+  }
 
+  @override
+  Widget build(BuildContext context) {
 
     return SafeArea(
       bottom: false,
