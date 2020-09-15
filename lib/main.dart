@@ -14,6 +14,7 @@ import 'commen/utils/hex_color.dart';
 void main() {
   //Bloc.observer = SimpleBlocObserver();
   print("main");
+
   runApp( MyApp());
 }
 
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
     return BlocProvider<MiniPlayerBloc>(
       create: (BuildContext context) => MiniPlayerBloc(MiniPlayerWidgetControlEvent.visible),
       child: MaterialApp(
+
+        //checkerboardRasterCacheImages: true,
+
         initialRoute:"/", //名为"/"的路由作为应用的home(首页)
 
         theme: ThemeData(

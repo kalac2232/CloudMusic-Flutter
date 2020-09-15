@@ -16,7 +16,7 @@ class BannerWidget extends StatefulWidget {
 class _BannerWidgetState extends State<BannerWidget> {
   PageController _pageController;
   Timer _timer;
-  int _currIndex = 0;
+  GlobalKey<_IndicatorState> _indicatorKey = GlobalKey();
 
   @override
   void initState() {
@@ -57,9 +57,8 @@ class _BannerWidgetState extends State<BannerWidget> {
                   controller: _pageController,
                   physics: BouncingScrollPhysics(),
                   onPageChanged: (page) {
-                    _currIndex = page % banners.length;
-
-                    setState(() {});
+                    _indicatorKey.currentState.onChange(page % banners.length);
+                    //setState(() {});
                   },
                   itemBuilder: (context, index) {
                     return Container(
@@ -69,7 +68,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                           child: Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(banners[index % banners.length].pic),
+                                    image: NetworkImage(banners[index % banners.length].pic + "?param=1029y402"),
                                     fit: BoxFit.cover,
                                   ),
                                 borderRadius: BorderRadius.all(
@@ -86,22 +85,7 @@ class _BannerWidgetState extends State<BannerWidget> {
               //指示器
               Positioned(
                 bottom: 6,
-                child: Row(
-                  children: banners.map((e) {
-                    var isSelected = banners.indexOf(e) == _currIndex;
-
-                    return Container(
-                      width: 6,
-                      height: 6,
-                      margin: EdgeInsets.only(left: 2, right: 2),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelected
-                              ? Theme.of(context).primaryColor
-                              : HexColor.fromHex("#80ECECEC")),
-                    );
-                  }).toList(),
-                ),
+                child: _Indicator(key:_indicatorKey,banners:banners),
               )
             ],
           );
@@ -127,5 +111,48 @@ class _BannerWidgetState extends State<BannerWidget> {
     super.dispose();
     _pageController?.dispose();
     _timer?.cancel();
+  }
+}
+
+class _Indicator extends StatefulWidget {
+
+  List<BannerBean> banners;
+
+
+  _Indicator({this.banners,Key key}):super(key:key);
+
+  @override
+  _IndicatorState createState() => _IndicatorState();
+}
+
+class _IndicatorState extends State<_Indicator> {
+
+  int _currIndex = 0;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: widget.banners.map((e) {
+        var isSelected = widget.banners.indexOf(e) == _currIndex;
+
+        return Container(
+          width: 6,
+          height: 6,
+          margin: EdgeInsets.only(left: 2, right: 2),
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : HexColor.fromHex("#80ECECEC")),
+        );
+      }).toList(),
+    );
+  }
+
+  void onChange(int currIndex) {
+    setState(() {
+      _currIndex = currIndex;
+    });
   }
 }

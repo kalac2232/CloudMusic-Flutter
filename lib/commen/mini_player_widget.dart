@@ -23,9 +23,23 @@ class MiniPlayerWidget extends StatelessWidget {
           return Visibility(
             visible: state == MiniPlayerWidgetControlEvent.visible,
             child: GestureDetector(
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: HexColor.fromHex("#949595")),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 30.w,
+                    width: 30.w,
+                    child: CircularProgressIndicator(
+                      backgroundColor: HexColor.fromHex("#E7E7E7"),
+                      valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                      value: .7,
+                      strokeWidth: 1.w,
+                    ),
+                  ),
+                  ClipOval(
+                    child: Image.network("http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=50y50",width: 24.w,height: 24.w,),
+                  )
+                ],
               ),
               onTap: () {
                 Navigator.push(context, CustomRoute(page: PlayerPager(),alignment: alignment));
@@ -53,8 +67,12 @@ class CustomRoute extends PageRouteBuilder {
               context,
               animation,
               secondaryAnimation,
-            ) =>
-                page,
+            ) {
+              animation.addListener(() {
+                rad = max_Radius * (1 - animation.value);
+              });
+              return page;
+              },
             transitionsBuilder: (
               context,
               animation,
@@ -62,21 +80,6 @@ class CustomRoute extends PageRouteBuilder {
               child,
             ) {
 
-              animation.addListener(() {
-                rad = max_Radius * (1 - animation.value);
-              });
-
-              animation.addStatusListener((status) {
-                if (status == AnimationStatus.completed) {
-                  print("动画完成了");
-                }
-              });
-
-              secondaryAnimation.addStatusListener((status) {
-                if (status == AnimationStatus.completed) {
-                  print("动画完成了2");
-                }
-              });
 
               return ScaleTransition(
                 alignment: alignment,

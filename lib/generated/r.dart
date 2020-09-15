@@ -31,4 +31,16 @@ class R {
 	static const String images_list_tag_mv = "assets/images/list_tag_mv.png";
 	static const String images_rcd_icn_more = "assets/images/rcd_icn_more.png";
 	static const String images_list_icn_solo = "assets/images/list_icn_solo.png";
+	static const String images_fm_btn_next = "assets/images/fm_btn_next.png";
+	static const String images_fm_btn_play = "assets/images/fm_btn_play.png";
+	static const String images_icn_list = "assets/images/icn_list.png";
+	static const String images_icn_loop = "assets/images/icn_loop.png";
+	static const String images_list_detail_icn_share = "assets/images/list_detail_icn_share.png";
+	static const String images_play_disc = "assets/images/play_disc.png";
+	static const String images_play_icn_cmt_num = "assets/images/play_icn_cmt_num.png";
+	static const String images_play_icn_dld = "assets/images/play_icn_dld.png";
+	static const String images_play_icn_love = "assets/images/play_icn_love.png";
+	static const String images_play_icn_more = "assets/images/play_icn_more.png";
+	static const String images_play_needle_play = "assets/images/play_needle_play.png";
+	static const String images_topbar_icn_karaoke2 = "assets/images/topbar_icn_karaoke2.png";
 }
