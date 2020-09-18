@@ -1,6 +1,6 @@
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/mini_player_bloc.dart';
-import 'package:cloudmusic/discovery/bloc/event/commen_event.dart';
+import 'package:cloudmusic/commen/bloc/event/commen_event.dart';
 import 'package:cloudmusic/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

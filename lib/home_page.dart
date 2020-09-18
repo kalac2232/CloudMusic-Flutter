@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'discovery/bloc/cubit/mini_player_bloc.dart';
-import 'discovery/bloc/event/commen_event.dart';
+import 'commen/bloc/event/commen_event.dart';
 import 'generated/r.dart';
 import 'discovery/discover_page.dart';
 import 'commen/only_text_pager.dart';

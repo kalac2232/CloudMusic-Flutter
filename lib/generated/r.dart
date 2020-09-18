@@ -33,6 +33,7 @@ class R {
 	static const String images_list_icn_solo = "assets/images/list_icn_solo.png";
 	static const String images_fm_btn_next = "assets/images/fm_btn_next.png";
 	static const String images_fm_btn_play = "assets/images/fm_btn_play.png";
+	static const String images_fm_btn_pause = "assets/images/fm_btn_pause.png";
 	static const String images_icn_list = "assets/images/icn_list.png";
 	static const String images_icn_loop = "assets/images/icn_loop.png";
 	static const String images_list_detail_icn_share = "assets/images/list_detail_icn_share.png";

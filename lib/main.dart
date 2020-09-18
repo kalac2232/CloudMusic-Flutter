@@ -1,11 +1,13 @@
 
+import 'package:cloudmusic/commen/bloc/player_bloc.dart';
+import 'package:cloudmusic/player/player_audio_manager.dart';
 import 'package:cloudmusic/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
 import 'discovery/bloc/cubit/mini_player_bloc.dart';
-import 'discovery/bloc/event/commen_event.dart';
+import 'commen/bloc/event/commen_event.dart';
 import 'discovery/daily_recommend_page.dart';
 import 'home_page.dart';
 import 'commen/utils/hex_color.dart';
@@ -26,8 +28,17 @@ class MyApp extends StatelessWidget {
     // 所以在使用Overlay添加到的widget中的content是创建MaterialApp时的content，要想在MiniPlayer中
     // 接收bloc事件，必须在创建MaterialApp时传入Bloc的Content（以上均为猜测）
     // https://juejin.im/post/6844903749534810119#heading-7
-    return BlocProvider<MiniPlayerBloc>(
-      create: (BuildContext context) => MiniPlayerBloc(MiniPlayerWidgetControlEvent.visible),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MiniPlayerBloc>(
+          create: (BuildContext context) => MiniPlayerBloc(MiniPlayerWidgetControlEvent.visible),
+        ),
+        //  处理全局音频播放
+        BlocProvider<PlayerBloc>(
+          create: (BuildContext context) => PlayerBloc(manager: PlayerAudioManager()),
+        )
+      ],
+
       child: MaterialApp(
 
         //checkerboardRasterCacheImages: true,

@@ -1,9 +1,13 @@
 import 'dart:ui';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:cloudmusic/commen/bloc/event/player_event.dart';
+import 'package:cloudmusic/commen/bloc/player_bloc.dart';
+import 'package:cloudmusic/commen/bloc/state/player_state.dart';
 import 'package:cloudmusic/commen/only_text_pager.dart';
+import 'package:cloudmusic/commen/widget/click_widget.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/mini_player_bloc.dart';
-import 'package:cloudmusic/discovery/bloc/event/commen_event.dart';
+import 'package:cloudmusic/commen/bloc/event/commen_event.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,31 +83,49 @@ class _PlayerPagerState extends State<PlayerPager> {
     super.deactivate();
   }
 }
+
 class _ExtraButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 16.w,right: 16.w),
+      margin: EdgeInsets.only(left: 16.w, right: 16.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Image.asset(R.images_play_icn_love,width: 28.w,height: 28.w,),
-          Image.asset(R.images_play_icn_dld,width: 28.w,height: 28.w,),
-          Image.asset(R.images_topbar_icn_karaoke2,width: 28.w,height: 28.w,),
-          Image.asset(R.images_play_icn_cmt_num,width: 28.w,height: 28.w,),
-          Image.asset(R.images_play_icn_more,width: 28.w,height: 28.w,),
+          Image.asset(
+            R.images_play_icn_love,
+            width: 28.w,
+            height: 28.w,
+          ),
+          Image.asset(
+            R.images_play_icn_dld,
+            width: 28.w,
+            height: 28.w,
+          ),
+          Image.asset(
+            R.images_topbar_icn_karaoke2,
+            width: 28.w,
+            height: 28.w,
+          ),
+          Image.asset(
+            R.images_play_icn_cmt_num,
+            width: 28.w,
+            height: 28.w,
+          ),
+          Image.asset(
+            R.images_play_icn_more,
+            width: 28.w,
+            height: 28.w,
+          ),
         ],
       ),
     );
   }
 }
 
-
-
 class _Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -116,12 +138,11 @@ class _Background extends StatelessWidget {
             )),
         Positioned(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child:Container(
-                color: Colors.black.withOpacity(0.5),
-
-              ),
-            )),
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+          ),
+        )),
       ],
     );
   }
@@ -133,7 +154,6 @@ class _SongPlayState extends StatefulWidget {
 }
 
 class __SongPlayStateState extends State<_SongPlayState> {
-
   double value = 0;
 
   @override
@@ -143,48 +163,54 @@ class __SongPlayStateState extends State<_SongPlayState> {
       children: <Widget>[
         Positioned(
           left: 15.w,
-          child: Text("00:00",style: TextStyle(
-              color: Colors.white,
-              fontSize: 9
-          ),),
+          child: Text(
+            "00:00",
+            style: TextStyle(color: Colors.white, fontSize: 9),
+          ),
         ),
         Positioned(
           width: 280.w,
           height: 8.w,
-          child:  SliderTheme( //自定义风格
+          child: SliderTheme(
+            //自定义风格
             data: SliderTheme.of(context).copyWith(
-                activeTrackColor: Colors.white.withOpacity(0.5), //进度条滑块左边颜色
-                inactiveTrackColor: Colors.white.withOpacity(0.15), //进度条滑块右边颜色
+                activeTrackColor: Colors.white.withOpacity(0.5),
+                //进度条滑块左边颜色
+                inactiveTrackColor: Colors.white.withOpacity(0.15),
+                //进度条滑块右边颜色
                 //trackShape: RoundSliderTrackShape(radius: 10),//进度条形状,这边自定义两头显示圆角
-                thumbColor: Colors.white, //滑块颜色
-                overlayColor: Colors.white, //滑块拖拽时外圈的颜色
-                overlayShape: RoundSliderOverlayShape(//可继承SliderComponentShape自定义形状
+                thumbColor: Colors.white,
+                //滑块颜色
+                overlayColor: Colors.white,
+                //滑块拖拽时外圈的颜色
+                overlayShape: RoundSliderOverlayShape(
+                  //可继承SliderComponentShape自定义形状
                   overlayRadius: 6.w, //滑块外圈大小
                 ),
-                thumbShape: RoundSliderThumbShape(//可继承SliderComponentShape自定义形状
+                thumbShape: RoundSliderThumbShape(
+                  //可继承SliderComponentShape自定义形状
                   disabledThumbRadius: 2.w, //禁用是滑块大小
                   enabledThumbRadius: 4.w, //滑块大小
                 ),
                 trackHeight: 2.w //进度条宽度
 
-            ),
+                ),
             child: Slider(
-              value: value??0,
+              value: value ?? 0,
               onChanged: (v) {
                 setState(() => value = v);
               },
               max: 100,
               min: 0,
             ),
-          )
-          ,
+          ),
         ),
         Positioned(
           right: 15.w,
-          child: Text("03:59",style: TextStyle(
-              color: Colors.white,
-              fontSize: 9
-          ),),
+          child: Text(
+            "03:59",
+            style: TextStyle(color: Colors.white, fontSize: 9),
+          ),
         )
       ],
     );
@@ -192,29 +218,39 @@ class __SongPlayStateState extends State<_SongPlayState> {
 }
 
 class _RecordWidget extends StatefulWidget {
-
-
   @override
   _RecordWidgetState createState() => _RecordWidgetState();
 }
 
-class _RecordWidgetState extends State<_RecordWidget> {
 
-  PageController _controller;
+class _RecordWidgetState extends State<_RecordWidget>
+    with TickerProviderStateMixin {
+  PageController _pageController;
+  AnimationController _animationController;
+  Animation _animation;
+
+  double _lastPageIndex;
+
+  bool _buttonTriggerEvent = false;
+
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _pageController = PageController();
+    _animationController = AnimationController(
+        duration: const Duration(milliseconds: 300), vsync: this);
+    _animation =
+        new Tween(begin: 0.0, end: -0.083).animate(_animationController);
 
-    _controller.addListener(() {
+    _pageController.addListener(() {
       //print(_controller.);
     });
+    _lastPageIndex = 0;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -233,41 +269,78 @@ class _RecordWidgetState extends State<_RecordWidget> {
           top: 127.w - 44.w,
           width: 375.w,
           height: 326.w,
-          child: NotificationListener(
-            onNotification: (Notification notification){
-              if (notification.runtimeType == ScrollStartNotification) {
-                //当滚动开始时，停止定时器
-                print("滚动开始");
-              } else if (notification.runtimeType ==
-                  ScrollEndNotification) {
-                print("滚动结束");
-              }
-              return false;
+          child: BlocListener<PlayerBloc, PlayerState>(
+
+
+            listener: (BuildContext context, PlayerState state) {
+
+              _handleStateChangeEvent(context,state);
+
             },
-            child: PageView.builder(controller:_controller,itemBuilder: (context,index){
-              return Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 194.w,
-                    height: 194.w,
-                    child: Image.network("http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
-                  ),
-                  Container(
-                    width: 326.w,
-                    height: 326.w,
-                    child: Image.asset(R.images_play_disc),
-                  )
-                ],
-              );
-            }),
+            child: NotificationListener(
+              onNotification: (Notification notification) {
+                if (notification.runtimeType == ScrollStartNotification) {
+                  //当滚动开始时，
+                  print("滚动开始");
+                  _animationController.forward();
+                } else if (notification.runtimeType == ScrollEndNotification) {
+                  print("滚动结束");
+                  _animationController.reverse();
+
+                  if (_pageController.page > _lastPageIndex) {
+                    print("向右滚");
+
+                    if (!_buttonTriggerEvent) {
+
+                      context.bloc<PlayerBloc>().add(PlayerNextEvent()..isChangePageView = false);
+                    }
+
+
+                  } else if(_pageController.page < _lastPageIndex){
+                    print("向左滚");
+                    if (!_buttonTriggerEvent) {
+
+                      context.bloc<PlayerBloc>().add(PlayerPreviousEvent()..isChangePageView = false);
+                    }
+                  } else {
+                    print("没动");
+                  }
+
+                  _buttonTriggerEvent = false;
+
+                  _lastPageIndex = _pageController.page;
+                }
+                return false;
+              },
+              child: PageView.builder(
+                  controller: _pageController,
+                  itemBuilder: (context, index) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: 194.w,
+                          height: 194.w,
+                          child: Image.network(
+                              "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
+                        ),
+                        Container(
+                          width: 326.w,
+                          height: 326.w,
+                          child: Image.asset(R.images_play_disc),
+                        )
+                      ],
+                    );
+                  }),
+            ),
           ),
         ),
         Positioned(
           top: -83.w - 44.w,
           width: 298.w,
           height: 298.w,
-          child: Transform.rotate(angle: -math.pi / 6,child: Image.asset(R.images_play_needle_play)),
+          child: RotationTransition(
+              turns: _animation, child: Image.asset(R.images_play_needle_play)),
         ),
       ],
     );
@@ -276,11 +349,51 @@ class _RecordWidgetState extends State<_RecordWidget> {
   @override
   void dispose() {
     super.dispose();
-    _controller?.dispose();
+    _pageController?.dispose();
+    _animationController?.dispose();
+  }
+
+  void _handleStateChangeEvent(BuildContext context, PlayerState state) {
+    print("listener收到事件");
+    if (state is PlayerInitialState) {
+      _handlePageViewChangeState(state);
+
+    } else if(state is PlayerRunInProgressState) {
+      _animationController.reverse();
+    } else if(state is PlayerPauseState) {
+      _animationController.forward();
+    }
+  }
+
+  ///
+  /// 处理下一首后viewpage的切换动作
+  ///
+  void _handlePageViewChangeState(PlayerInitialState state) {
+    //如果状态改为了初始状态，则判断下是不是因切换歌曲而进行的状态改变，进而改变动画
+    if (state.event is PlayerNextEvent) {
+
+      PlayerNextEvent e = state.event;
+      if (e.isChangePageView) {
+        _pageController?.nextPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.linear);
+        _buttonTriggerEvent = true;
+      }
+
+
+    } else if (state.event is PlayerPreviousEvent) {
+      PlayerPreviousEvent e = state.event;
+      if (e.isChangePageView) {
+        _pageController?.previousPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.linear);
+        _buttonTriggerEvent = true;
+      }
+
+
+    }
   }
 }
-
-
 
 class _TopBar extends StatelessWidget {
   @override
@@ -352,40 +465,63 @@ class _TopBar extends StatelessWidget {
 class _ControllerButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          width: 28.w,
-          height: 28.w,
-          left: 25.w,
-          child: Image.asset(R.images_icn_loop),
-        ),
-        Positioned(
-          width: 28.w,
-          height: 28.w,
-          left: 100.w,
-          child: Transform.rotate(angle: math.pi,child: Image.asset(R.images_fm_btn_next)),
-        ),
-        Positioned(
-          width: 60.w,
-          height: 60.w,
-          child: Image.asset(R.images_fm_btn_play),
-        ),
-        Positioned(
-          width: 28.w,
-          height: 28.w,
-          right: 100.w,
-          child: Image.asset(R.images_fm_btn_next),
-        ),
-        Positioned(
-          width: 28.w,
-          height: 28.w,
-          right: 25.w,
-          child: Image.asset(R.images_icn_list),
-        ),
-      ],
+    return BlocBuilder<PlayerBloc,PlayerState>(
+      builder: (BuildContext context, PlayerState state) {
+
+        return Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              width: 28.w,
+              height: 28.w,
+              left: 25.w,
+              child: Image.asset(R.images_icn_loop),
+            ),
+            Positioned(
+              width: 28.w,
+              height: 28.w,
+              left: 100.w,
+              child: ClickWidget(
+                  onClick: () {
+                    context.bloc<PlayerBloc>().add(PlayerPreviousEvent());
+                  },
+                  child: Transform.rotate(
+                      angle: math.pi, child: Image.asset(R.images_fm_btn_next))),
+            ),
+            Positioned(
+              width: 60.w,
+              height: 60.w,
+              child: ClickWidget(onClick:(){
+                if (state is PlayerInitialState){
+                  context.bloc<PlayerBloc>().add(PlayerStartedEvent());
+                } else if(state is PlayerRunInProgressState) {
+                  context.bloc<PlayerBloc>().add(PlayerPausedEvent());
+                } else if(state is PlayerPauseState) {
+                  context.bloc<PlayerBloc>().add(PlayerResumedEvent());
+                }
+
+              },child: Image.asset(state is PlayerRunInProgressState ? R.images_fm_btn_pause : R.images_fm_btn_play )),
+            ),
+            Positioned(
+              width: 28.w,
+              height: 28.w,
+              right: 100.w,
+              child: ClickWidget(
+                  onClick: () {
+                    print("点击了");
+                    context.bloc<PlayerBloc>().add(PlayerNextEvent());
+                  },
+                  child: Image.asset(R.images_fm_btn_next)),
+            ),
+            Positioned(
+              width: 28.w,
+              height: 28.w,
+              right: 25.w,
+              child: Image.asset(R.images_icn_list),
+            ),
+          ],
+        );
+      },
     );
   }
 }
-
