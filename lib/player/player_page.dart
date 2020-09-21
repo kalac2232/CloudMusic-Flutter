@@ -24,7 +24,7 @@ class _PlayerPagerState extends State<PlayerPager> {
   @override
   void initState() {
     super.initState();
-    print("initState");
+
     context.bloc<MiniPlayerBloc>().add(MiniPlayerWidgetControlEvent.gone);
   }
 
@@ -62,7 +62,7 @@ class _PlayerPagerState extends State<PlayerPager> {
           ),
           Positioned(
             width: 375.w,
-            height: 60.h,
+            height: 60.w,
             bottom: 16.h,
             child: _ControllerButtons(),
           )
@@ -233,6 +233,8 @@ class _RecordWidgetState extends State<_RecordWidget>
 
   bool _buttonTriggerEvent = false;
 
+  PlayerState _currentState = PlayerInitialState();
+  List _albumItemWidgetKeyList;
 
   @override
   void initState() {
@@ -241,12 +243,19 @@ class _RecordWidgetState extends State<_RecordWidget>
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     _animation =
-        new Tween(begin: 0.0, end: -0.083).animate(_animationController);
+        new Tween(begin: -0.083, end: 0.0).animate(_animationController);
 
     _pageController.addListener(() {
       //print(_controller.);
     });
     _lastPageIndex = 0;
+
+    _albumItemWidgetKeyList = List();
+
+    for(int i = 0; i < 10; i++) {
+      _albumItemWidgetKeyList.add(GlobalKey());
+    }
+
   }
 
   @override
@@ -270,11 +279,13 @@ class _RecordWidgetState extends State<_RecordWidget>
           width: 375.w,
           height: 326.w,
           child: BlocListener<PlayerBloc, PlayerState>(
-
-
-            listener: (BuildContext context, PlayerState state) {
-
+            listener: (context,state){
+              _currentState = state;
               _handleStateChangeEvent(context,state);
+
+              if(state is! PlayerPauseState && state is! PlayerInitialState){
+                _animationController.forward();
+              }
 
             },
             child: NotificationListener(
@@ -282,10 +293,14 @@ class _RecordWidgetState extends State<_RecordWidget>
                 if (notification.runtimeType == ScrollStartNotification) {
                   //当滚动开始时，
                   print("滚动开始");
-                  _animationController.forward();
+                  if(_currentState is! PlayerPauseState) {
+                    _animationController.reverse();
+                    _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.stopRotation();
+                  }
+
+
                 } else if (notification.runtimeType == ScrollEndNotification) {
                   print("滚动结束");
-                  _animationController.reverse();
 
                   if (_pageController.page > _lastPageIndex) {
                     print("向右滚");
@@ -304,6 +319,11 @@ class _RecordWidgetState extends State<_RecordWidget>
                     }
                   } else {
                     print("没动");
+                    if(_currentState is! PlayerPauseState) {
+                      _animationController?.forward();
+                      _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.startRotation();
+                    }
+
                   }
 
                   _buttonTriggerEvent = false;
@@ -314,23 +334,10 @@ class _RecordWidgetState extends State<_RecordWidget>
               },
               child: PageView.builder(
                   controller: _pageController,
+                  itemCount: 10,
                   itemBuilder: (context, index) {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 194.w,
-                          height: 194.w,
-                          child: Image.network(
-                              "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
-                        ),
-                        Container(
-                          width: 326.w,
-                          height: 326.w,
-                          child: Image.asset(R.images_play_disc),
-                        )
-                      ],
-                    );
+
+                    return _AlbumItemWidget(key: _albumItemWidgetKeyList[index],);
                   }),
             ),
           ),
@@ -354,14 +361,14 @@ class _RecordWidgetState extends State<_RecordWidget>
   }
 
   void _handleStateChangeEvent(BuildContext context, PlayerState state) {
-    print("listener收到事件");
+    print("listener收到事件" + state.toString());
     if (state is PlayerInitialState) {
       _handlePageViewChangeState(state);
 
     } else if(state is PlayerRunInProgressState) {
-      _animationController.reverse();
-    } else if(state is PlayerPauseState) {
       _animationController.forward();
+    } else if(state is PlayerPauseState) {
+      _animationController.reverse();
     }
   }
 
@@ -394,6 +401,93 @@ class _RecordWidgetState extends State<_RecordWidget>
     }
   }
 }
+
+class _AlbumItemWidget extends StatefulWidget {
+
+  _AlbumItemWidget({Key key}) : super(key:key);
+  @override
+  _AlbumItemWidgetState createState() => _AlbumItemWidgetState();
+}
+
+class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderStateMixin {
+
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        duration: const Duration(seconds: 20), vsync: this);
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        //动画从 controller.forward() 正向执行 结束时会回调此方法
+        //重置起点
+        _animationController.reset();
+        //开启
+        _animationController.forward();
+      }
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      builder: (context,state){
+
+        if (state is PlayerRunInProgressState) {
+          startRotation();
+        } else {
+          stopRotation();
+        }
+
+        return RotationTransition(
+          //设置动画的旋转中心
+          alignment: Alignment.center,
+          turns: _animationController,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 194.w,
+                height: 194.w,
+                child: Image.network(
+                    "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
+              ),
+              Container(
+                width: 326.w,
+                height: 326.w,
+                child: Image.asset(R.images_play_disc),
+              )
+            ],
+          ),
+        );
+      },
+
+    );
+  }
+
+  void stopRotation(){
+    _animationController.stop();
+  }
+
+  void startRotation() {
+
+    new Future.delayed(Duration(milliseconds: 300)).then((value) {
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+
+    _animationController?.dispose();
+    super.dispose();
+  }
+}
+
+
 
 class _TopBar extends StatelessWidget {
   @override
