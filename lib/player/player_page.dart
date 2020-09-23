@@ -287,6 +287,12 @@ class _RecordWidgetState extends State<_RecordWidget>
                 _animationController.forward();
               }
 
+              if (state is PlayerRunInProgressState) {
+                _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.startRotation();
+              } else {
+                _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.stopRotation();
+              }
+
             },
             child: NotificationListener(
               onNotification: (Notification notification) {
@@ -433,37 +439,26 @@ class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayerBloc, PlayerState>(
-      builder: (context,state){
-
-        if (state is PlayerRunInProgressState) {
-          startRotation();
-        } else {
-          stopRotation();
-        }
-
-        return RotationTransition(
-          //设置动画的旋转中心
-          alignment: Alignment.center,
-          turns: _animationController,
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 194.w,
-                height: 194.w,
-                child: Image.network(
-                    "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
-              ),
-              Container(
-                width: 326.w,
-                height: 326.w,
-                child: Image.asset(R.images_play_disc),
-              )
-            ],
+    return RotationTransition(
+      //设置动画的旋转中心
+      alignment: Alignment.center,
+      turns: _animationController,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Container(
+            width: 194.w,
+            height: 194.w,
+            child: Image.network(
+                "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
           ),
-        );
-      },
+          Container(
+            width: 326.w,
+            height: 326.w,
+            child: Image.asset(R.images_play_disc),
+          )
+        ],
+      ),
 
     );
   }

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         ),
         //  处理全局音频播放
         BlocProvider<PlayerBloc>(
-          create: (BuildContext context) => PlayerBloc(manager: PlayerAudioManager()),
+          create: (BuildContext context) => PlayerBloc(manager: PlayerAudioManager.getInstance()),
         )
       ],
 

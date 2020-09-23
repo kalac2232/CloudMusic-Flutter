@@ -67,12 +67,13 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   }
 
   Stream<PlayerState> _mapPlayerNextToState(PlayerNextEvent event) async* {
-    print("bloc 收到");
+
     yield PlayerInitialState(event: event);
+    _playerAudioManager.next();
   }
 
   Stream<PlayerState> _mapPlayerPreviousToState(PlayerPreviousEvent event) async* {
     yield PlayerInitialState(event: event);
-
+    _playerAudioManager.pre();
   }
 }

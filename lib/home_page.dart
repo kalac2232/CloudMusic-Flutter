@@ -1,6 +1,7 @@
 
 import 'package:cloudmusic/commen/mini_player_widget.dart';
 import 'package:cloudmusic/mine/mine_page.dart';
+import 'package:cloudmusic/player/player_audio_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +21,8 @@ class HomePage extends StatelessWidget {
     print("HomePage");
     ScreenUtil.init(context, width: 375, height: 667);
     createPlayerWidget(context);
+    //播放器的content需要包含PlayerBloc的Content
+    PlayerAudioManager.getInstance().context = context;
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
