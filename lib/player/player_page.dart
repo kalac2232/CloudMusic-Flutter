@@ -158,61 +158,77 @@ class __SongPlayStateState extends State<_SongPlayState> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          left: 15.w,
-          child: Text(
-            "00:00",
-            style: TextStyle(color: Colors.white, fontSize: 9),
-          ),
-        ),
-        Positioned(
-          width: 280.w,
-          height: 8.w,
-          child: SliderTheme(
-            //自定义风格
-            data: SliderTheme.of(context).copyWith(
-                activeTrackColor: Colors.white.withOpacity(0.5),
-                //进度条滑块左边颜色
-                inactiveTrackColor: Colors.white.withOpacity(0.15),
-                //进度条滑块右边颜色
-                //trackShape: RoundSliderTrackShape(radius: 10),//进度条形状,这边自定义两头显示圆角
-                thumbColor: Colors.white,
-                //滑块颜色
-                overlayColor: Colors.white,
-                //滑块拖拽时外圈的颜色
-                overlayShape: RoundSliderOverlayShape(
-                  //可继承SliderComponentShape自定义形状
-                  overlayRadius: 6.w, //滑块外圈大小
-                ),
-                thumbShape: RoundSliderThumbShape(
-                  //可继承SliderComponentShape自定义形状
-                  disabledThumbRadius: 2.w, //禁用是滑块大小
-                  enabledThumbRadius: 4.w, //滑块大小
-                ),
-                trackHeight: 2.w //进度条宽度
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      builder: (BuildContext context, PlayerState state) {
 
-                ),
-            child: Slider(
-              value: value ?? 0,
-              onChanged: (v) {
-                setState(() => value = v);
-              },
-              max: 100,
-              min: 0,
+        if (state.currentDuration.inMicroseconds == 0) {
+          value = 0;
+        } else {
+          value = state.currentDuration.inMicroseconds ~/ state.maxDuration.inMilliseconds / 10;
+        }
+
+
+        //print(progress);
+
+        return Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              left: 15.w,
+              child: Text(
+                state.currentDuration.toString().substring(2,7),
+                style: TextStyle(color: Colors.white, fontSize: 9),
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          right: 15.w,
-          child: Text(
-            "03:59",
-            style: TextStyle(color: Colors.white, fontSize: 9),
-          ),
-        )
-      ],
+            Positioned(
+              width: 280.w,
+              height: 8.w,
+              child: SliderTheme(
+                //自定义风格
+                data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: Colors.white.withOpacity(0.5),
+                    //进度条滑块左边颜色
+                    inactiveTrackColor: Colors.white.withOpacity(0.15),
+                    //进度条滑块右边颜色
+                    //trackShape: RoundSliderTrackShape(radius: 10),//进度条形状,这边自定义两头显示圆角
+                    thumbColor: Colors.white,
+                    //滑块颜色
+                    overlayColor: Colors.white,
+                    //滑块拖拽时外圈的颜色
+                    overlayShape: RoundSliderOverlayShape(
+                      //可继承SliderComponentShape自定义形状
+                      overlayRadius: 6.w, //滑块外圈大小
+                    ),
+                    thumbShape: RoundSliderThumbShape(
+                      //可继承SliderComponentShape自定义形状
+                      disabledThumbRadius: 2.w, //禁用是滑块大小
+                      enabledThumbRadius: 4.w, //滑块大小
+                    ),
+                    trackHeight: 2.w //进度条宽度
+
+                    ),
+                child: Slider(
+                  value: value,
+                  onChanged: (v) {
+                    double seekTo = v / 100;
+                    //print(seekTo);
+                    context.bloc<PlayerBloc>().add(PlayerSeekEvent(seekTo: seekTo));
+                  },
+                  max: 100,
+                  min: 0,
+                ),
+              ),
+            ),
+            Positioned(
+              right: 15.w,
+              child: Text(
+                state.maxDuration.toString().substring(2,7),
+                style: TextStyle(color: Colors.white, fontSize: 9),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
@@ -221,7 +237,6 @@ class _RecordWidget extends StatefulWidget {
   @override
   _RecordWidgetState createState() => _RecordWidgetState();
 }
-
 
 class _RecordWidgetState extends State<_RecordWidget>
     with TickerProviderStateMixin {
@@ -235,6 +250,8 @@ class _RecordWidgetState extends State<_RecordWidget>
 
   PlayerState _currentState = PlayerInitialState();
   List _albumItemWidgetKeyList;
+
+  bool _isScrolling = false;
 
   @override
   void initState() {
@@ -252,10 +269,9 @@ class _RecordWidgetState extends State<_RecordWidget>
 
     _albumItemWidgetKeyList = List();
 
-    for(int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
       _albumItemWidgetKeyList.add(GlobalKey());
     }
-
   }
 
   @override
@@ -279,57 +295,59 @@ class _RecordWidgetState extends State<_RecordWidget>
           width: 375.w,
           height: 326.w,
           child: BlocListener<PlayerBloc, PlayerState>(
-            listener: (context,state){
+            listener: (context, state) {
               _currentState = state;
-              _handleStateChangeEvent(context,state);
 
-              if(state is! PlayerPauseState && state is! PlayerInitialState){
+              if (_isScrolling) {
+                return;
+              }
+              _handleStateChangeEvent(context, state);
+
+              if (state is! PlayerPauseState && state is! PlayerInitialState) {
                 _animationController.forward();
               }
-
-              if (state is PlayerRunInProgressState) {
-                _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.startRotation();
-              } else {
-                _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.stopRotation();
-              }
-
             },
             child: NotificationListener(
               onNotification: (Notification notification) {
                 if (notification.runtimeType == ScrollStartNotification) {
                   //当滚动开始时，
                   print("滚动开始");
-                  if(_currentState is! PlayerPauseState) {
+
+                  _isScrolling = true;
+
+                  if (_currentState is! PlayerPauseState) {
                     _animationController.reverse();
-                    _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.stopRotation();
+                    _albumItemWidgetKeyList[_pageController.page.toInt()]
+                        .currentState
+                        .stopRotation();
                   }
-
-
                 } else if (notification.runtimeType == ScrollEndNotification) {
                   print("滚动结束");
+                  _isScrolling = false;
 
                   if (_pageController.page > _lastPageIndex) {
                     print("向右滚");
 
                     if (!_buttonTriggerEvent) {
-
-                      context.bloc<PlayerBloc>().add(PlayerNextEvent()..isChangePageView = false);
+                      context
+                          .bloc<PlayerBloc>()
+                          .add(PlayerNextEvent()..isChangePageView = false);
                     }
-
-
-                  } else if(_pageController.page < _lastPageIndex){
+                  } else if (_pageController.page < _lastPageIndex) {
                     print("向左滚");
                     if (!_buttonTriggerEvent) {
-
-                      context.bloc<PlayerBloc>().add(PlayerPreviousEvent()..isChangePageView = false);
+                      context
+                          .bloc<PlayerBloc>()
+                          .add(PlayerPreviousEvent()..isChangePageView = false);
                     }
                   } else {
                     print("没动");
-                    if(_currentState is! PlayerPauseState) {
+                    if (_currentState is! PlayerPauseState) {
                       _animationController?.forward();
-                      _albumItemWidgetKeyList[_pageController.page.toInt()].currentState.startRotation();
+                      _albumItemWidgetKeyList[_pageController.page.toInt()]
+                          .currentState
+                          .startRotation();
                     }
-
                   }
 
                   _buttonTriggerEvent = false;
@@ -342,8 +360,9 @@ class _RecordWidgetState extends State<_RecordWidget>
                   controller: _pageController,
                   itemCount: 10,
                   itemBuilder: (context, index) {
-
-                    return _AlbumItemWidget(key: _albumItemWidgetKeyList[index],);
+                    return _AlbumItemWidget(
+                      key: _albumItemWidgetKeyList[index],
+                    );
                   }),
             ),
           ),
@@ -370,11 +389,16 @@ class _RecordWidgetState extends State<_RecordWidget>
     print("listener收到事件" + state.toString());
     if (state is PlayerInitialState) {
       _handlePageViewChangeState(state);
-
-    } else if(state is PlayerRunInProgressState) {
+    } else if (state is PlayerRunInProgressState) {
       _animationController.forward();
-    } else if(state is PlayerPauseState) {
+      _albumItemWidgetKeyList[_pageController.page.toInt()]
+          .currentState
+          .startRotation();
+    } else if (state is PlayerPauseState) {
       _animationController.reverse();
+      _albumItemWidgetKeyList[_pageController.page.toInt()]
+          .currentState
+          .stopRotation();
     }
   }
 
@@ -384,46 +408,39 @@ class _RecordWidgetState extends State<_RecordWidget>
   void _handlePageViewChangeState(PlayerInitialState state) {
     //如果状态改为了初始状态，则判断下是不是因切换歌曲而进行的状态改变，进而改变动画
     if (state.event is PlayerNextEvent) {
-
       PlayerNextEvent e = state.event;
       if (e.isChangePageView) {
         _pageController?.nextPage(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.linear);
+            duration: Duration(milliseconds: 300), curve: Curves.linear);
         _buttonTriggerEvent = true;
       }
-
-
     } else if (state.event is PlayerPreviousEvent) {
       PlayerPreviousEvent e = state.event;
       if (e.isChangePageView) {
         _pageController?.previousPage(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.linear);
+            duration: Duration(milliseconds: 300), curve: Curves.linear);
         _buttonTriggerEvent = true;
       }
-
-
     }
   }
 }
 
 class _AlbumItemWidget extends StatefulWidget {
+  _AlbumItemWidget({Key key}) : super(key: key);
 
-  _AlbumItemWidget({Key key}) : super(key:key);
   @override
   _AlbumItemWidgetState createState() => _AlbumItemWidgetState();
 }
 
-class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderStateMixin {
-
+class _AlbumItemWidgetState extends State<_AlbumItemWidget>
+    with TickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-        duration: const Duration(seconds: 20), vsync: this);
+    _animationController =
+        AnimationController(duration: const Duration(seconds: 20), vsync: this);
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -435,7 +452,6 @@ class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderS
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -459,16 +475,20 @@ class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderS
           )
         ],
       ),
-
     );
   }
 
-  void stopRotation(){
+  void stopRotation() {
     _animationController.stop();
+    print("stopRotation");
   }
 
   void startRotation() {
+    if (_animationController.isAnimating) {
+      return;
+    }
 
+    print("startRotation");
     new Future.delayed(Duration(milliseconds: 300)).then((value) {
       _animationController.forward();
     });
@@ -476,13 +496,10 @@ class _AlbumItemWidgetState extends State<_AlbumItemWidget> with TickerProviderS
 
   @override
   void dispose() {
-
     _animationController?.dispose();
     super.dispose();
   }
 }
-
-
 
 class _TopBar extends StatelessWidget {
   @override
@@ -554,9 +571,8 @@ class _TopBar extends StatelessWidget {
 class _ControllerButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayerBloc,PlayerState>(
+    return BlocBuilder<PlayerBloc, PlayerState>(
       builder: (BuildContext context, PlayerState state) {
-
         return Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -575,21 +591,25 @@ class _ControllerButtons extends StatelessWidget {
                     context.bloc<PlayerBloc>().add(PlayerPreviousEvent());
                   },
                   child: Transform.rotate(
-                      angle: math.pi, child: Image.asset(R.images_fm_btn_next))),
+                      angle: math.pi,
+                      child: Image.asset(R.images_fm_btn_next))),
             ),
             Positioned(
               width: 60.w,
               height: 60.w,
-              child: ClickWidget(onClick:(){
-                if (state is PlayerInitialState){
-                  context.bloc<PlayerBloc>().add(PlayerStartedEvent());
-                } else if(state is PlayerRunInProgressState) {
-                  context.bloc<PlayerBloc>().add(PlayerPausedEvent());
-                } else if(state is PlayerPauseState) {
-                  context.bloc<PlayerBloc>().add(PlayerResumedEvent());
-                }
-
-              },child: Image.asset(state is PlayerRunInProgressState ? R.images_fm_btn_pause : R.images_fm_btn_play )),
+              child: ClickWidget(
+                  onClick: () {
+                    if (state is PlayerInitialState) {
+                      context.bloc<PlayerBloc>().add(PlayerStartedEvent());
+                    } else if (state is PlayerRunInProgressState) {
+                      context.bloc<PlayerBloc>().add(PlayerPausedEvent());
+                    } else if (state is PlayerPauseState) {
+                      context.bloc<PlayerBloc>().add(PlayerResumedEvent());
+                    }
+                  },
+                  child: Image.asset(state is PlayerRunInProgressState
+                      ? R.images_fm_btn_pause
+                      : R.images_fm_btn_play)),
             ),
             Positioned(
               width: 28.w,

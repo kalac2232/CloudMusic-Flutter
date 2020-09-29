@@ -43,23 +43,38 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
       yield* _mapPlayerNextToState(event);
 
+    } else if (event is PlayerSeekEvent) {
+
+      yield* _mapPlayerSeekToState(event);
+
     }
   }
 
   Stream<PlayerState> _mapPlayerStartedToState(PlayerStartedEvent event) async* {
-    yield PlayerRunInProgressState();
+    yield PlayerRunInProgressState(currentDuration: Duration(seconds: 0),maxDuration: Duration(seconds: 0));
+    _playerAudioManager.start();
   }
 
   Stream<PlayerState> _mapPlayerPausedToState(PlayerPausedEvent event) async* {
-    yield PlayerPauseState();
+    _playerAudioManager.pause();
+
+    Duration currentPosition = await _playerAudioManager.getCurrentPosition();
+    Duration maxDuration = await _playerAudioManager.getMaxDuration();
+
+    yield PlayerPauseState(currentDuration: currentPosition,maxDuration: maxDuration);
   }
 
   Stream<PlayerState> _mapPlayerResumedToState(PlayerResumedEvent event) async* {
-    yield PlayerRunInProgressState();
+    _playerAudioManager.resume();
+
+    Duration currentPosition = await _playerAudioManager.getCurrentPosition();
+    Duration maxDuration = await _playerAudioManager.getMaxDuration();
+
+    yield PlayerRunInProgressState(currentDuration: currentPosition,maxDuration: maxDuration);
   }
 
   Stream<PlayerState> _mapPlayerProgressToState(PlayerProgressEvent event) async* {
-    yield PlayerRunInProgressState();
+    yield PlayerRunInProgressState(currentDuration: event.currentDuration,maxDuration: event.maxDuration);
   }
 
   Stream<PlayerState> _mapPlayerCompletedToState(PlayerCompletedEvent event) async* {
@@ -75,5 +90,14 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   Stream<PlayerState> _mapPlayerPreviousToState(PlayerPreviousEvent event) async* {
     yield PlayerInitialState(event: event);
     _playerAudioManager.pre();
+  }
+
+  Stream<PlayerState> _mapPlayerSeekToState(PlayerSeekEvent event) async* {
+    Duration currentPosition = await _playerAudioManager.getCurrentPosition();
+    Duration maxDuration = await _playerAudioManager.getMaxDuration();
+
+    yield PlayerPauseState(currentDuration: currentPosition,maxDuration: maxDuration);
+
+    _playerAudioManager.seekTo(event.seekTo);
   }
 }

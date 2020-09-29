@@ -16,11 +16,21 @@ class PlayerResumedEvent extends PlayerEvent{
 
 }
 
+class PlayerSeekEvent extends PlayerEvent{
+
+  final double seekTo;
+
+  PlayerSeekEvent({@required this.seekTo});
+
+
+}
+
 class PlayerProgressEvent extends PlayerEvent{
 
-  final double progress;
+  final Duration currentDuration;
+  final Duration maxDuration;
 
-  PlayerProgressEvent({@required this.progress});
+  PlayerProgressEvent({@required this.currentDuration,@required this.maxDuration});
 
 
 }
