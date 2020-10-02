@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<MiniPlayerBloc>(
-          create: (BuildContext context) => MiniPlayerBloc(MiniPlayerWidgetControlEvent.visible),
+          create: (BuildContext context) => MiniPlayerBloc(MiniPlayerWidgetControlEvent.gone),
         ),
         //  处理全局音频播放
         BlocProvider<PlayerBloc>(

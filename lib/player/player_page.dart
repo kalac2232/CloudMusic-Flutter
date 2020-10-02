@@ -9,6 +9,7 @@ import 'package:cloudmusic/commen/widget/click_widget.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/mini_player_bloc.dart';
 import 'package:cloudmusic/commen/bloc/event/commen_event.dart';
 import 'package:cloudmusic/generated/r.dart';
+import 'package:cloudmusic/player/widget/record_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,7 @@ class _PlayerPagerState extends State<PlayerPager> {
             //top: 0,
             width: 375.w,
             height: 516.w + MediaQuery.of(context).padding.top,
-            child: _RecordWidget(),
+            child: RecordWidget(),
           ),
           Positioned(
             top: MediaQuery.of(context).padding.top,
@@ -126,24 +127,32 @@ class _ExtraButtons extends StatelessWidget {
 class _Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Image.network(
-              "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=150y150",
-              fit: BoxFit.fitHeight,
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      buildWhen: (previousState, state) {
+        return state is PlayerInitialState;
+      },
+      builder: (BuildContext context, PlayerState state) {
+        return Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Image.network(
+                  state.songBean.picUrl + "?param=150y150",
+                  gaplessPlayback: true,
+                  fit: BoxFit.fitHeight,
+                )),
+            Positioned(
+                child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+              ),
             )),
-        Positioned(
-            child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            color: Colors.black.withOpacity(0.5),
-          ),
-        )),
-      ],
+          ],
+        );
+      },
     );
   }
 }
@@ -156,17 +165,33 @@ class _SongPlayState extends StatefulWidget {
 class __SongPlayStateState extends State<_SongPlayState> {
   double value = 0;
 
+  Duration _currentDuration;
+  Duration _maxDuration;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlayerBloc, PlayerState>(
+      buildWhen: (preState, currentState) {
+        return currentState is PlayerRunInProgressState ||
+            currentState is PlayerInitialState;
+      },
       builder: (BuildContext context, PlayerState state) {
-
-        if (state.currentDuration.inMicroseconds == 0) {
+        if (state is PlayerInitialState) {
+          _currentDuration = Duration();
+          _maxDuration = Duration(milliseconds: state.songBean.duration);
           value = 0;
-        } else {
-          value = state.currentDuration.inMicroseconds ~/ state.maxDuration.inMilliseconds / 10;
-        }
+        } else if (state is PlayerRunInProgressState) {
+          if (state.currentDuration.inMicroseconds == 0) {
+            value = 0;
+          } else {
+            value = state.currentDuration.inMicroseconds ~/
+                state.maxDuration.inMilliseconds /
+                10;
+          }
 
+          _currentDuration = state.currentDuration;
+          //_maxDuration = state.maxDuration;
+        }
 
         //print(progress);
 
@@ -176,7 +201,7 @@ class __SongPlayStateState extends State<_SongPlayState> {
             Positioned(
               left: 15.w,
               child: Text(
-                state.currentDuration.toString().substring(2,7),
+                _currentDuration.toString().substring(2, 7),
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),
             ),
@@ -212,7 +237,9 @@ class __SongPlayStateState extends State<_SongPlayState> {
                   onChanged: (v) {
                     double seekTo = v / 100;
                     //print(seekTo);
-                    context.bloc<PlayerBloc>().add(PlayerSeekEvent(seekTo: seekTo));
+                    context
+                        .bloc<PlayerBloc>()
+                        .add(PlayerSeekEvent(seekTo: seekTo));
                   },
                   max: 100,
                   min: 0,
@@ -222,7 +249,7 @@ class __SongPlayStateState extends State<_SongPlayState> {
             Positioned(
               right: 15.w,
               child: Text(
-                state.maxDuration.toString().substring(2,7),
+                _maxDuration.toString().substring(2, 7),
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),
             )
@@ -233,337 +260,77 @@ class __SongPlayStateState extends State<_SongPlayState> {
   }
 }
 
-class _RecordWidget extends StatefulWidget {
-  @override
-  _RecordWidgetState createState() => _RecordWidgetState();
-}
-
-class _RecordWidgetState extends State<_RecordWidget>
-    with TickerProviderStateMixin {
-  PageController _pageController;
-  AnimationController _animationController;
-  Animation _animation;
-
-  double _lastPageIndex;
-
-  bool _buttonTriggerEvent = false;
-
-  PlayerState _currentState = PlayerInitialState();
-  List _albumItemWidgetKeyList;
-
-  bool _isScrolling = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
-    _animation =
-        new Tween(begin: -0.083, end: 0.0).animate(_animationController);
-
-    _pageController.addListener(() {
-      //print(_controller.);
-    });
-    _lastPageIndex = 0;
-
-    _albumItemWidgetKeyList = List();
-
-    for (int i = 0; i < 10; i++) {
-      _albumItemWidgetKeyList.add(GlobalKey());
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: <Widget>[
-        Positioned(
-          top: 137.w - 44.w,
-          width: 306.w,
-          height: 306.w,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-        Positioned(
-          top: 127.w - 44.w,
-          width: 375.w,
-          height: 326.w,
-          child: BlocListener<PlayerBloc, PlayerState>(
-            listener: (context, state) {
-              _currentState = state;
-
-              if (_isScrolling) {
-                return;
-              }
-              _handleStateChangeEvent(context, state);
-
-              if (state is! PlayerPauseState && state is! PlayerInitialState) {
-                _animationController.forward();
-              }
-            },
-            child: NotificationListener(
-              onNotification: (Notification notification) {
-                if (notification.runtimeType == ScrollStartNotification) {
-                  //当滚动开始时，
-                  print("滚动开始");
-
-                  _isScrolling = true;
-
-                  if (_currentState is! PlayerPauseState) {
-                    _animationController.reverse();
-                    _albumItemWidgetKeyList[_pageController.page.toInt()]
-                        .currentState
-                        .stopRotation();
-                  }
-                } else if (notification.runtimeType == ScrollEndNotification) {
-                  print("滚动结束");
-                  _isScrolling = false;
-
-                  if (_pageController.page > _lastPageIndex) {
-                    print("向右滚");
-
-                    if (!_buttonTriggerEvent) {
-                      context
-                          .bloc<PlayerBloc>()
-                          .add(PlayerNextEvent()..isChangePageView = false);
-                    }
-                  } else if (_pageController.page < _lastPageIndex) {
-                    print("向左滚");
-                    if (!_buttonTriggerEvent) {
-                      context
-                          .bloc<PlayerBloc>()
-                          .add(PlayerPreviousEvent()..isChangePageView = false);
-                    }
-                  } else {
-                    print("没动");
-                    if (_currentState is! PlayerPauseState) {
-                      _animationController?.forward();
-                      _albumItemWidgetKeyList[_pageController.page.toInt()]
-                          .currentState
-                          .startRotation();
-                    }
-                  }
-
-                  _buttonTriggerEvent = false;
-
-                  _lastPageIndex = _pageController.page;
-                }
-                return false;
-              },
-              child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return _AlbumItemWidget(
-                      key: _albumItemWidgetKeyList[index],
-                    );
-                  }),
-            ),
-          ),
-        ),
-        Positioned(
-          top: -83.w - 44.w,
-          width: 298.w,
-          height: 298.w,
-          child: RotationTransition(
-              turns: _animation, child: Image.asset(R.images_play_needle_play)),
-        ),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController?.dispose();
-    _animationController?.dispose();
-  }
-
-  void _handleStateChangeEvent(BuildContext context, PlayerState state) {
-    print("listener收到事件" + state.toString());
-    if (state is PlayerInitialState) {
-      _handlePageViewChangeState(state);
-    } else if (state is PlayerRunInProgressState) {
-      _animationController.forward();
-      _albumItemWidgetKeyList[_pageController.page.toInt()]
-          .currentState
-          .startRotation();
-    } else if (state is PlayerPauseState) {
-      _animationController.reverse();
-      _albumItemWidgetKeyList[_pageController.page.toInt()]
-          .currentState
-          .stopRotation();
-    }
-  }
-
-  ///
-  /// 处理下一首后viewpage的切换动作
-  ///
-  void _handlePageViewChangeState(PlayerInitialState state) {
-    //如果状态改为了初始状态，则判断下是不是因切换歌曲而进行的状态改变，进而改变动画
-    if (state.event is PlayerNextEvent) {
-      PlayerNextEvent e = state.event;
-      if (e.isChangePageView) {
-        _pageController?.nextPage(
-            duration: Duration(milliseconds: 300), curve: Curves.linear);
-        _buttonTriggerEvent = true;
-      }
-    } else if (state.event is PlayerPreviousEvent) {
-      PlayerPreviousEvent e = state.event;
-      if (e.isChangePageView) {
-        _pageController?.previousPage(
-            duration: Duration(milliseconds: 300), curve: Curves.linear);
-        _buttonTriggerEvent = true;
-      }
-    }
-  }
-}
-
-class _AlbumItemWidget extends StatefulWidget {
-  _AlbumItemWidget({Key key}) : super(key: key);
-
-  @override
-  _AlbumItemWidgetState createState() => _AlbumItemWidgetState();
-}
-
-class _AlbumItemWidgetState extends State<_AlbumItemWidget>
-    with TickerProviderStateMixin {
-  AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController =
-        AnimationController(duration: const Duration(seconds: 20), vsync: this);
-
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        //动画从 controller.forward() 正向执行 结束时会回调此方法
-        //重置起点
-        _animationController.reset();
-        //开启
-        _animationController.forward();
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RotationTransition(
-      //设置动画的旋转中心
-      alignment: Alignment.center,
-      turns: _animationController,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Container(
-            width: 194.w,
-            height: 194.w,
-            child: Image.network(
-                "http://p3.music.126.net/mwCUI0iL3xEC2a4WVICHlA==/109951163115369030.jpg?param=500y500"),
-          ),
-          Container(
-            width: 326.w,
-            height: 326.w,
-            child: Image.asset(R.images_play_disc),
-          )
-        ],
-      ),
-    );
-  }
-
-  void stopRotation() {
-    _animationController.stop();
-    print("stopRotation");
-  }
-
-  void startRotation() {
-    if (_animationController.isAnimating) {
-      return;
-    }
-
-    print("startRotation");
-    new Future.delayed(Duration(milliseconds: 300)).then((value) {
-      _animationController.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
-  }
-}
-
 class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          left: 20.w,
-          top: 11.w,
-          width: 12.w,
-          height: 22.w,
-          child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(R.images_act_view_btn_back)),
-        ),
-        Positioned(
-          top: 4.w,
-          child: Text(
-            "Diamond Heart",
-            style: TextStyle(
-              fontSize: 17.sp,
-              color: Colors.white,
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      buildWhen: (previousState, state) {
+        return state is PlayerInitialState;
+      },
+      builder: (BuildContext context, PlayerState state) {
+        print("11111" + state.songBean.name);
+        return Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              left: 20.w,
+              top: 11.w,
+              width: 12.w,
+              height: 22.w,
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(R.images_act_view_btn_back)),
             ),
-          ),
-        ),
-        Positioned(
-          top: 25.w,
-          child: Row(
-            children: <Widget>[
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 152.w,
+            Positioned(
+              top: 4.w,
+              child: Text(
+                state.songBean.name,
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  color: Colors.white,
                 ),
-                child: TextOneLine(
-                  "Alan Walker/SophiaSoasdaaaaaa",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.white,
+              ),
+            ),
+            Positioned(
+              top: 25.w,
+              child: Row(
+                children: <Widget>[
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: 152.w,
+                    ),
+                    child: TextOneLine(
+                      state.songBean.getArtistsStr(),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    width: 3.w,
+                  ),
+                  Transform.rotate(
+                      angle: math.pi,
+                      child: Image.asset(
+                        R.images_act_view_btn_back,
+                        width: 5.w,
+                        height: 10.h,
+                      ))
+                ],
               ),
-              SizedBox(
-                width: 3.w,
-              ),
-              Transform.rotate(
-                  angle: math.pi,
-                  child: Image.asset(
-                    R.images_act_view_btn_back,
-                    width: 5.w,
-                    height: 10.h,
-                  ))
-            ],
-          ),
-        ),
-        Positioned(
-          width: 28.w,
-          height: 28.w,
-          right: 16.w,
-          child: Image.asset(R.images_list_detail_icn_share),
-        )
-      ],
+            ),
+            Positioned(
+              width: 28.w,
+              height: 28.w,
+              right: 16.w,
+              child: Image.asset(R.images_list_detail_icn_share),
+            )
+          ],
+        );
+      },
     );
   }
 }
@@ -571,66 +338,64 @@ class _TopBar extends StatelessWidget {
 class _ControllerButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayerBloc, PlayerState>(
-      builder: (BuildContext context, PlayerState state) {
-        return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              width: 28.w,
-              height: 28.w,
-              left: 25.w,
-              child: Image.asset(R.images_icn_loop),
-            ),
-            Positioned(
-              width: 28.w,
-              height: 28.w,
-              left: 100.w,
-              child: ClickWidget(
-                  onClick: () {
-                    context.bloc<PlayerBloc>().add(PlayerPreviousEvent());
-                  },
-                  child: Transform.rotate(
-                      angle: math.pi,
-                      child: Image.asset(R.images_fm_btn_next))),
-            ),
-            Positioned(
-              width: 60.w,
-              height: 60.w,
-              child: ClickWidget(
-                  onClick: () {
-                    if (state is PlayerInitialState) {
-                      context.bloc<PlayerBloc>().add(PlayerStartedEvent());
-                    } else if (state is PlayerRunInProgressState) {
-                      context.bloc<PlayerBloc>().add(PlayerPausedEvent());
-                    } else if (state is PlayerPauseState) {
-                      context.bloc<PlayerBloc>().add(PlayerResumedEvent());
-                    }
-                  },
-                  child: Image.asset(state is PlayerRunInProgressState
-                      ? R.images_fm_btn_pause
-                      : R.images_fm_btn_play)),
-            ),
-            Positioned(
-              width: 28.w,
-              height: 28.w,
-              right: 100.w,
-              child: ClickWidget(
-                  onClick: () {
-                    print("点击了");
-                    context.bloc<PlayerBloc>().add(PlayerNextEvent());
-                  },
-                  child: Image.asset(R.images_fm_btn_next)),
-            ),
-            Positioned(
-              width: 28.w,
-              height: 28.w,
-              right: 25.w,
-              child: Image.asset(R.images_icn_list),
-            ),
-          ],
-        );
-      },
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Positioned(
+          width: 28.w,
+          height: 28.w,
+          left: 25.w,
+          child: Image.asset(R.images_icn_loop),
+        ),
+        Positioned(
+          width: 28.w,
+          height: 28.w,
+          left: 100.w,
+          child: ClickWidget(
+              onClick: () {
+                context.bloc<PlayerBloc>().add(PlayerPreviousEvent());
+              },
+              child: Transform.rotate(
+                  angle: math.pi, child: Image.asset(R.images_fm_btn_next))),
+        ),
+        Positioned(
+            width: 60.w,
+            height: 60.w,
+            child: BlocBuilder<PlayerBloc, PlayerState>(
+              builder: (BuildContext context, PlayerState state) {
+                return ClickWidget(
+                    onClick: () {
+                      if (state is PlayerInitialState) {
+                        context.bloc<PlayerBloc>().add(PlayerStartedEvent());
+                      } else if (state is PlayerRunInProgressState) {
+                        context.bloc<PlayerBloc>().add(PlayerPausedEvent());
+                      } else if (state is PlayerPauseState) {
+                        context.bloc<PlayerBloc>().add(PlayerResumedEvent());
+                      }
+                    },
+                    child: Image.asset(state is PlayerRunInProgressState
+                        ? R.images_fm_btn_pause
+                        : R.images_fm_btn_play));
+              },
+            )),
+        Positioned(
+          width: 28.w,
+          height: 28.w,
+          right: 100.w,
+          child: ClickWidget(
+              onClick: () {
+                print("点击了");
+                context.bloc<PlayerBloc>().add(PlayerNextEvent());
+              },
+              child: Image.asset(R.images_fm_btn_next)),
+        ),
+        Positioned(
+          width: 28.w,
+          height: 28.w,
+          right: 25.w,
+          child: Image.asset(R.images_icn_list),
+        ),
+      ],
     );
   }
 }

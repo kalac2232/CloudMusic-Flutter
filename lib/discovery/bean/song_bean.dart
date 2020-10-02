@@ -7,6 +7,8 @@ class SongBean{
   String picUrl;
   String company;
   String type;
+  //歌曲长度
+  int duration;
 
   bool isSQ;
   //是否是独家
@@ -15,6 +17,7 @@ class SongBean{
   String alias;
 
   int mvId;
+
 
   SongBean(this.name, this.id, this.artists, this.picUrl);
 
@@ -26,6 +29,7 @@ class SongBean{
       artists.add(ArtistBean.fromJson(json['ar'][i]));
     }
     picUrl = json['al']["picUrl"];
+    duration = json['dt'];
   }
 
 

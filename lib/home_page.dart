@@ -1,6 +1,7 @@
 
 import 'package:cloudmusic/commen/mini_player_widget.dart';
 import 'package:cloudmusic/mine/mine_page.dart';
+import 'package:cloudmusic/player/play_list_manager.dart';
 import 'package:cloudmusic/player/player_audio_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -23,6 +24,9 @@ class HomePage extends StatelessWidget {
     createPlayerWidget(context);
     //播放器的content需要包含PlayerBloc的Content
     PlayerAudioManager.getInstance().context = context;
+
+    PlayListManager.getInstance().init(context);
+
     return Container(
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
@@ -83,12 +87,12 @@ void createPlayerWidget(BuildContext context) {
     return MiniPlayerWidget();
   });
 
+  var overlay = Overlay.of(context);
 
-
-  new Future.delayed(Duration(seconds: 2)).then((value) {
-    //往Overlay中插入插入OverlayEntry
-    Overlay.of(context).insert(overlayEntry);
-  });
+  //直接添加会抛出
+  // This Overlay widget cannot be marked as needing to build because the framework is already in the process of building widgets.
+  // 错误
+  WidgetsBinding.instance.addPostFrameCallback((_) => overlay.insert(overlayEntry));
 
 }
 

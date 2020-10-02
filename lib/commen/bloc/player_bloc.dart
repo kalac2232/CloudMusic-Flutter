@@ -1,5 +1,6 @@
 import 'package:cloudmusic/commen/bloc/event/player_event.dart';
 import 'package:cloudmusic/commen/bloc/state/player_state.dart';
+import 'package:cloudmusic/player/play_list_manager.dart';
 import 'package:cloudmusic/player/player_audio_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +53,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   Stream<PlayerState> _mapPlayerStartedToState(PlayerStartedEvent event) async* {
     yield PlayerRunInProgressState(currentDuration: Duration(seconds: 0),maxDuration: Duration(seconds: 0));
-    _playerAudioManager.start();
+    _playerAudioManager.start(PlayListManager.getInstance().getCurrentSong());
   }
 
   Stream<PlayerState> _mapPlayerPausedToState(PlayerPausedEvent event) async* {
@@ -83,13 +84,13 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   Stream<PlayerState> _mapPlayerNextToState(PlayerNextEvent event) async* {
 
-    yield PlayerInitialState(event: event);
     _playerAudioManager.next();
+    yield PlayerInitialState(event: event);
   }
 
   Stream<PlayerState> _mapPlayerPreviousToState(PlayerPreviousEvent event) async* {
-    yield PlayerInitialState(event: event);
     _playerAudioManager.pre();
+    yield PlayerInitialState(event: event);
   }
 
   Stream<PlayerState> _mapPlayerSeekToState(PlayerSeekEvent event) async* {

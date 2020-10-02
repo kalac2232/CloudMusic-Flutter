@@ -2,6 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloudmusic/commen/bloc/event/player_event.dart';
 import 'package:cloudmusic/commen/bloc/player_bloc.dart';
 import 'package:cloudmusic/commen/net/http_request.dart';
+import 'package:cloudmusic/discovery/bean/song_bean.dart';
+import 'package:cloudmusic/player/play_list_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -24,22 +26,17 @@ class PlayerAudioManager {
 
         if(_audioPlayer.state != AudioPlayerState.PAUSED && _audioPlayer.state != AudioPlayerState.STOPPED) {
 
-          if (_audioPlayer.state == AudioPlayerState.PAUSED) {
-            print("发送 PlayerProgressEvent  PAUSED");
-          }
-          if (_audioPlayer.state == AudioPlayerState.STOPPED) {
-            print("发送 PlayerProgressEvent  STOPPED");
-          }
-          if (_audioPlayer.state == AudioPlayerState.PLAYING) {
-            print("发送 PlayerProgressEvent  PLAYING");
-          }
-          if (_audioPlayer.state == AudioPlayerState.COMPLETED) {
-            print("发送 PlayerProgressEvent  COMPLETED");
-          }
-
           context.bloc<PlayerBloc>().add(PlayerProgressEvent(currentDuration: p,maxDuration: Duration(milliseconds: value)));
         }
       });
+
+    });
+
+    _audioPlayer.onPlayerStateChanged.listen((AudioPlayerState s)  {
+      print('Current player state: $s');
+      if (s == AudioPlayerState.COMPLETED) {
+        context.bloc<PlayerBloc>().add(PlayerCompletedEvent());
+      }
 
     });
   }
@@ -52,8 +49,9 @@ class PlayerAudioManager {
     return _instance;
   }
 
-  Future<void> start() async {
-    var url = await _getRealUrl("28285910");
+  Future<void> start(SongBean songBean) async {
+
+    var url = await _getRealUrl(songBean.id.toString());
     print("start:" + url);
     _audioPlayer.stop();
     _audioPlayer.play(url);
@@ -66,18 +64,21 @@ class PlayerAudioManager {
   void next() {
     _audioPlayer.stop();
     print("next");
-    new Future.delayed(Duration(milliseconds: 3000)).then((value) {
-      context.bloc<PlayerBloc>().add(PlayerStartedEvent());
-    });
+    start(PlayListManager.getInstance().getNextSong(PlayMode.order));
   }
 
-  void pre() {}
+  void pre() {
+    _audioPlayer.stop();
+    print("pre");
+    start(PlayListManager.getInstance().getPreviousSong(PlayMode.order));
+  }
 
   void resume() {
     _audioPlayer.resume();
   }
 
   Future<String> _getRealUrl(String id) async {
+    print(id);
     var result =
         await httpRequest.get(path: "/song/url", parameters: {"id": id});
     return result.data["data"][0]["url"];

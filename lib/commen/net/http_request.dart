@@ -25,7 +25,7 @@ class HttpRequest {
     //配置一个拦截器，这个拦截器 可以在所有的请求发送或失败时统一进行处理
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      print("请求地址:" + options.path);
+      print("请求地址:" + options.path + "请求参数：" + options.extra.toString());
       return options;
     }, onResponse: (Response response) {
       //print("拿到内容:" + response.toString());
