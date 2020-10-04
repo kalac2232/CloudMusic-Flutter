@@ -227,7 +227,7 @@ class DragBollButtons extends StatelessWidget {
             children: <Widget>[
               DragonBollWidget(text: "每日推荐",icon: R.images_cm6_disc_topbtn_daily,onTap: ()=>Navigator.pushNamed(context, "daily_recommend_page"),),
               Positioned(
-                top: 16.w,
+                top: 17.w,
                 //使用IgnorePointer 防止这个Text拦截点击事件
                 child: IgnorePointer(child: Text(day.toString(),style: TextStyle(color: HexColor.fromHex("#FF3D3D"),fontSize: 10.sp),)),
               )

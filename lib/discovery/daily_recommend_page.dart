@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloudmusic/commen/net/http_request.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
+import 'package:cloudmusic/commen/widget/back_btn.dart';
 import 'package:cloudmusic/discovery/bean/song_bean.dart';
 import 'package:cloudmusic/discovery/widget/calendar_ring_widget.dart';
 import 'package:cloudmusic/discovery/widget/daily_song_item_widget.dart';
@@ -234,17 +235,7 @@ class _TopBar extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        Positioned(
-          left: 20.w,
-          top: 11.w,
-          width: 12.w,
-          height: 22.w,
-          child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(R.images_act_view_btn_back)),
-        ),
+        BackBtn(context),
         Positioned(
           child: Text(
             "每日推荐",

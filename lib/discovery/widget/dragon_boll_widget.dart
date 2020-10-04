@@ -1,7 +1,7 @@
 import 'package:cloudmusic/commen/constant/color.dart';
 import 'package:cloudmusic/commen/utils/hex_color.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DragonBollWidget extends StatelessWidget {
 
   final String text;
@@ -15,16 +15,16 @@ class DragonBollWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        width: 46,
-        height: 70,
+        width: 46.w,
+        height: 70.w,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Positioned(
               top: 0,
               child: Container(
-                width: 46,
-                height: 46,
+                width: 46.w,
+                height: 46.w,
                 decoration: BoxDecoration(
                   gradient: mainGradientColor, //背景渐变
                   shape: BoxShape.circle,

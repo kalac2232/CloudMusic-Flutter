@@ -90,7 +90,7 @@ class _RecordWidgetState extends State<RecordWidget>
 
                   _isScrolling = true;
 
-                  if (_currentState is! PlayerPauseState && _currentState is! PlayerInitialState) {
+                  if (_currentState is! PlayerPauseState) {
                     _animationController.reverse();
                     _albumItemWidgetKeyList[_pageController.page.toInt()]
                         .currentState

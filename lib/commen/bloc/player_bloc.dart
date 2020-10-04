@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
+
   final PlayerAudioManager _playerAudioManager;
 
   PlayerBloc({@required PlayerAudioManager manager})
@@ -47,15 +48,21 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     } else if (event is PlayerSeekEvent) {
 
       yield* _mapPlayerSeekToState(event);
-
     }
-  }
 
+
+  }
+  ///
+  /// 处理开始播放事件
+  ///
   Stream<PlayerState> _mapPlayerStartedToState(PlayerStartedEvent event) async* {
     yield PlayerRunInProgressState(currentDuration: Duration(seconds: 0),maxDuration: Duration(seconds: 0));
     _playerAudioManager.start(PlayListManager.getInstance().getCurrentSong());
   }
 
+  ///
+  /// 处理暂停播放事件
+  ///
   Stream<PlayerState> _mapPlayerPausedToState(PlayerPausedEvent event) async* {
     _playerAudioManager.pause();
 
@@ -65,6 +72,9 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     yield PlayerPauseState(currentDuration: currentPosition,maxDuration: maxDuration);
   }
 
+  ///
+  /// 处理恢复播放事件
+  ///
   Stream<PlayerState> _mapPlayerResumedToState(PlayerResumedEvent event) async* {
     _playerAudioManager.resume();
 
@@ -74,6 +84,9 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     yield PlayerRunInProgressState(currentDuration: currentPosition,maxDuration: maxDuration);
   }
 
+  ///
+  /// 处理进度回调事件
+  ///
   Stream<PlayerState> _mapPlayerProgressToState(PlayerProgressEvent event) async* {
     yield PlayerRunInProgressState(currentDuration: event.currentDuration,maxDuration: event.maxDuration);
   }
@@ -93,12 +106,20 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     yield PlayerInitialState(event: event);
   }
 
+  ///
+  /// 处理seek后的状态变化
+  ///
   Stream<PlayerState> _mapPlayerSeekToState(PlayerSeekEvent event) async* {
-    Duration currentPosition = await _playerAudioManager.getCurrentPosition();
+    _playerAudioManager.seekTo(event.seekTo);
+    //Duration currentPosition = await _playerAudioManager.getCurrentPosition();
     Duration maxDuration = await _playerAudioManager.getMaxDuration();
 
-    yield PlayerPauseState(currentDuration: currentPosition,maxDuration: maxDuration);
+    if (state is PlayerPauseState) {
+      yield PlayerPauseState(currentDuration: Duration(milliseconds: (maxDuration.inMilliseconds * event.seekTo).toInt()),maxDuration: maxDuration);
+    } else {
+      yield PlayerRunInProgressState(currentDuration: Duration(milliseconds: (maxDuration.inMilliseconds * event.seekTo).toInt()),maxDuration: maxDuration);
+    }
 
-    _playerAudioManager.seekTo(event.seekTo);
+
   }
 }

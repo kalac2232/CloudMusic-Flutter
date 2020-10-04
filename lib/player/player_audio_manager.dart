@@ -39,6 +39,7 @@ class PlayerAudioManager {
       }
 
     });
+
   }
 
   static PlayerAudioManager _getInstance() {

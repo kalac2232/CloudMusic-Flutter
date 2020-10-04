@@ -5,11 +5,13 @@ import 'package:cloudmusic/commen/bloc/event/player_event.dart';
 import 'package:cloudmusic/commen/bloc/player_bloc.dart';
 import 'package:cloudmusic/commen/bloc/state/player_state.dart';
 import 'package:cloudmusic/commen/only_text_pager.dart';
+import 'package:cloudmusic/commen/widget/back_btn.dart';
 import 'package:cloudmusic/commen/widget/click_widget.dart';
 import 'package:cloudmusic/discovery/bloc/cubit/mini_player_bloc.dart';
 import 'package:cloudmusic/commen/bloc/event/commen_event.dart';
 import 'package:cloudmusic/generated/r.dart';
 import 'package:cloudmusic/player/widget/record_widget.dart';
+import 'package:cloudmusic/player/widget/song_play_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +61,7 @@ class _PlayerPagerState extends State<PlayerPager> {
             width: 375.w,
             height: 13.h,
             bottom: 85.h,
-            child: _SongPlayState(),
+            child: SongPlayStateWidget(),
           ),
           Positioned(
             width: 375.w,
@@ -157,108 +159,6 @@ class _Background extends StatelessWidget {
   }
 }
 
-class _SongPlayState extends StatefulWidget {
-  @override
-  __SongPlayStateState createState() => __SongPlayStateState();
-}
-
-class __SongPlayStateState extends State<_SongPlayState> {
-  double value = 0;
-
-  Duration _currentDuration;
-  Duration _maxDuration;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PlayerBloc, PlayerState>(
-      buildWhen: (preState, currentState) {
-        return currentState is PlayerRunInProgressState ||
-            currentState is PlayerInitialState;
-      },
-      builder: (BuildContext context, PlayerState state) {
-        if (state is PlayerInitialState) {
-          _currentDuration = Duration();
-          _maxDuration = Duration(milliseconds: state.songBean.duration);
-          value = 0;
-        } else if (state is PlayerRunInProgressState) {
-          if (state.currentDuration.inMicroseconds == 0) {
-            value = 0;
-          } else {
-            value = state.currentDuration.inMicroseconds ~/
-                state.maxDuration.inMilliseconds /
-                10;
-          }
-
-          _currentDuration = state.currentDuration;
-          //_maxDuration = state.maxDuration;
-        }
-
-        //print(progress);
-
-        return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              left: 15.w,
-              child: Text(
-                _currentDuration.toString().substring(2, 7),
-                style: TextStyle(color: Colors.white, fontSize: 9),
-              ),
-            ),
-            Positioned(
-              width: 280.w,
-              height: 8.w,
-              child: SliderTheme(
-                //自定义风格
-                data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: Colors.white.withOpacity(0.5),
-                    //进度条滑块左边颜色
-                    inactiveTrackColor: Colors.white.withOpacity(0.15),
-                    //进度条滑块右边颜色
-                    //trackShape: RoundSliderTrackShape(radius: 10),//进度条形状,这边自定义两头显示圆角
-                    thumbColor: Colors.white,
-                    //滑块颜色
-                    overlayColor: Colors.white,
-                    //滑块拖拽时外圈的颜色
-                    overlayShape: RoundSliderOverlayShape(
-                      //可继承SliderComponentShape自定义形状
-                      overlayRadius: 6.w, //滑块外圈大小
-                    ),
-                    thumbShape: RoundSliderThumbShape(
-                      //可继承SliderComponentShape自定义形状
-                      disabledThumbRadius: 2.w, //禁用是滑块大小
-                      enabledThumbRadius: 4.w, //滑块大小
-                    ),
-                    trackHeight: 2.w //进度条宽度
-
-                    ),
-                child: Slider(
-                  value: value,
-                  onChanged: (v) {
-                    double seekTo = v / 100;
-                    //print(seekTo);
-                    context
-                        .bloc<PlayerBloc>()
-                        .add(PlayerSeekEvent(seekTo: seekTo));
-                  },
-                  max: 100,
-                  min: 0,
-                ),
-              ),
-            ),
-            Positioned(
-              right: 15.w,
-              child: Text(
-                _maxDuration.toString().substring(2, 7),
-                style: TextStyle(color: Colors.white, fontSize: 9),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-}
 
 class _TopBar extends StatelessWidget {
   @override
@@ -268,21 +168,10 @@ class _TopBar extends StatelessWidget {
         return state is PlayerInitialState;
       },
       builder: (BuildContext context, PlayerState state) {
-        print("11111" + state.songBean.name);
         return Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Positioned(
-              left: 20.w,
-              top: 11.w,
-              width: 12.w,
-              height: 22.w,
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Image.asset(R.images_act_view_btn_back)),
-            ),
+            BackBtn(context),
             Positioned(
               top: 4.w,
               child: Text(
@@ -365,7 +254,7 @@ class _ControllerButtons extends StatelessWidget {
               builder: (BuildContext context, PlayerState state) {
                 return ClickWidget(
                     onClick: () {
-                      if (state is PlayerInitialState) {
+                      if (state is PlayerInitialState || state is PlayerCompleteState) {
                         context.bloc<PlayerBloc>().add(PlayerStartedEvent());
                       } else if (state is PlayerRunInProgressState) {
                         context.bloc<PlayerBloc>().add(PlayerPausedEvent());
