@@ -1,5 +1,6 @@
 
 import 'package:cloudmusic/commen/mini_player_widget.dart';
+import 'package:cloudmusic/commen/test_pager.dart';
 import 'package:cloudmusic/mine/mine_page.dart';
 import 'package:cloudmusic/player/play_list_manager.dart';
 import 'package:cloudmusic/player/player_audio_manager.dart';
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
       child: SwitchAnimBottomNaviBarWidget(
         pagers: <Widget>[
           DisCoverPage(),
-          LyricWidget(),
+          TestPager(),
           MinePage(),
           OnlyTextPage(text: "页面3",),
           OnlyTextPage(text: "页面4",),
