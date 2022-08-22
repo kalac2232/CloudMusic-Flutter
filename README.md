@@ -2,15 +2,8 @@
 
 fake netcloudmusic
 
-## Getting Started
+目前完成首页、播放页
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![1](WX20220822-175241@2x.png)
+![2](WX20220822-175431@2x.png)
+![3](WX20220822-175523@2x.png)

@@ -93,15 +93,15 @@ class _WrapDisCoverPageState extends State<_WrapDisCoverPage> {
     //获取banner
     _getBannerFromNet(context);
     //获取推荐歌单
-    //_getRecommendListFromNet(context);
+    _getRecommendListFromNet(context);
     //获取某种歌曲列表及标题
-    //_getCategoryListFromNet(context);
+    _getCategoryListFromNet(context);
     //获取新歌推荐
-    //_getNewSongFromNet(context);
+    _getNewSongFromNet(context);
     //获取新碟
-    //_getNewAlbumFromNet(context);
+    _getNewAlbumFromNet(context);
     //获取排行榜
-    //_getRankData(context);
+    _getRankData(context);
   }
 
   @override

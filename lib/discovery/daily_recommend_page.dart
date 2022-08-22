@@ -75,13 +75,13 @@ class _DailyRecommendPageState extends State<DailyRecommendPage> {
     var todayStr = dateTime.year.toString() + dateTime.month.toString() + dateTime.day.toString();
 
     String jsonStr = prefs.get("daily_date_" + todayStr);
-    if (jsonStr == null || jsonStr.isEmpty)  {
+    if (jsonStr == null || jsonStr.isEmpty || jsonStr == "null")  {
+    // if (true)  {
 
       var response = await httpRequest.get(path: "/recommend/songs");
-      jsonStr = json.encode(response.data["recommend"]);
+      jsonStr = json.encode(response.data["data"]["dailySongs"]);
 
-      //缓存数据
-      prefs.setString("daily_date_" + todayStr,jsonStr);
+      print(jsonStr);
     }
 
     List list = json.decode(jsonStr);
@@ -90,10 +90,11 @@ class _DailyRecommendPageState extends State<DailyRecommendPage> {
       this.songBeanList.add(SongBean.fromDailyRecommendJson(json));
     }).toList();
 
-
-
+    //缓存数据
+    prefs.setString("daily_date_" + todayStr,json.encode(list));
+    
     setState(() {
-
+      print("object"+list.length.toString());
     });
     //httpRequest.get(path: "/login/cellphone?phone=17684721017&password=qweasdzxc").then((value) => print(value));
 

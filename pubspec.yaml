@@ -40,7 +40,7 @@ dependencies:
   flutter_bloc: ^6.0.5
   flutter_screenutil: ^2.3.0
   palette_generator: ^0.2.3
-  assorted_layout_widgets: ^1.3.3 #丑陋TextOverflow.ellipsis的临时解决方案
+  #assorted_layout_widgets: ^4.0.2 #丑陋TextOverflow.ellipsis的临时解决方案
 
 dev_dependencies:
   flutter_test:

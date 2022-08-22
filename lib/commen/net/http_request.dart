@@ -17,7 +17,7 @@ class HttpRequest {
     //设置基本参数
     if (baseOptions == null) {
       baseOptions = BaseOptions(
-          baseUrl: BASE_URL, connectTimeout: 5000, receiveTimeout: 10000 //接受超时
+          baseUrl: BASE_URL, connectTimeout: 5000, receiveTimeout: 50000 //接受超时
           );
     }
 

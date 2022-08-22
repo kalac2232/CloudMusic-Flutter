@@ -55,17 +55,17 @@ class SongBean{
   }
 
   SongBean.fromDailyRecommendJson(Map<String, dynamic> json){
-    name = json['album']['name'];
-    id = json['album']['id'];
-    picUrl = json['album']["blurPicUrl"];
-    type = json['album']["type"];
+    name = json['al']['name'];
+    id = json['al']['id'];
+    picUrl = json['al']["picUrl"];
+    //type = json['album']["type"];
     artists = List();
-    for(int i = 0; i < json['album']['artists'].length;i++) {
-      artists.add(ArtistBean.fromJson(json['album']['artists'][i]));
+    for(int i = 0; i < json['ar'].length;i++) {
+      artists.add(ArtistBean.fromJson(json['ar'][i]));
     }
     isSQ = json['privilege']['maxbr'] >= 999000;
     isSole = json['privilege']['flag'] == 64;
-    mvId = json['mvid'];
+    mvId = json['mv'];
   }
 
   Map<String, dynamic> toJson() =>

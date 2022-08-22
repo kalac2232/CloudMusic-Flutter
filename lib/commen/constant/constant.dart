@@ -1,1 +1,1 @@
-const String BASE_URL = "http://www.kalac.cn:3000/";
+const String BASE_URL = "http://localhost:3000/";

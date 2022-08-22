@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+//import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:cloudmusic/commen/bloc/event/player_event.dart';
 import 'package:cloudmusic/commen/bloc/player_bloc.dart';
 import 'package:cloudmusic/commen/bloc/state/player_state.dart';
@@ -190,13 +190,7 @@ class _TopBar extends StatelessWidget {
                     constraints: BoxConstraints(
                       maxWidth: 152.w,
                     ),
-                    child: TextOneLine(
-                      state.songBean.getArtistsStr(),
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.white,
-                      ),
-                    ),
+
                   ),
                   SizedBox(
                     width: 3.w,
